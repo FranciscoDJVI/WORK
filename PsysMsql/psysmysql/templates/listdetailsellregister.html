@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load currency_filters %}
+{% block content %}
+<h2 class="mx-5 my-10 text-blue-950 text-xm bg-white w-[fit-content] p-2 rounded-3xl">
+  Registro de venta número: {{ register_sell_instance.idsell}}
+</h2>
+<hr>
+<table class="bg-blue-950 grid text-gray-200 text-xm mx-10 my-10">
+  <thead>
+    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center items-center bg-white text-xm text-blue-950">
+      <th class="w-20">ID</th>
+      <th class="w-20">name</th>
+      <th class="w-20">quantity</th>
+      <th class="w-20">price</th>
+      <th class="w-20">pxu</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in detail %}
+    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center p-2 italic ">
+      <td>{{ item.id_product }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.pricexquantity|format_currency_cop }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'list_all_sell_register' %}" class="text-blue-950 absolute top-10 right-40 mb-10">Back</a>
+{% endblock %}

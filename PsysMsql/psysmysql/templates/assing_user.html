@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white mx-100 my-20 p-2 grid justify-items-center items-center">
+  <h1 class="text-black-200 text-xl grid justify-items-center my-5 p-2">{{ title }}</h2>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+        {{ message }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <form class="text-blue-950 text-xm italic grid justify-items-center" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="bg-blue-950 text-gray-200 rounded-3xl w-50 my-5" type="submit"
+        class="btn btn-primary">Asignar</button>
+    </form>
+    <hr />
+    <section class="grid justify-items-center items-center">
+      <h2 class="text-xl text-black grid justify-items-center items-center">Usuarios y sus Grupos Actuales</h2>
+      <table class="mx-10 my-10 rounded-2xl  text-gray-200 text-xl h-[fit-content] w-100 ">
+        <thead class="bg-gray-200 text-blue-950 italic">
+          <tr class=" grid grid-cols-2  bg-white text-xm text-blue-950">
+            <th class="">Usuario</th>
+            <th class="">Grupos</th>
+          </tr>
+        </thead>
+        <tbody class="p-4">
+          {% for user_obj in users_with_groups %}
+          <tr class="grid grid-cols-2 justify-items-center bg-blue-950 text-xm text-gray-200">
+            <td>{{ user_obj.username }}</td>
+            <td>
+              {% for group in user_obj.groups.all %}
+              <span class="badge bg-info text-dark">{{ group.name }}</span>
+              {% empty %}
+              <small>Sin grupos</small>
+              {% endfor %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2">No hay usuarios para mostrar.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <a href="{% url 'main' %}" class="bg-blue-950 text-gray-200 rounded-3xl w-50 my-5 p-2 text-center">Volver al
+      Inicio</a>
+</div>
+{% endblock %}

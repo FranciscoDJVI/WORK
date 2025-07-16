@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+<title>{% block title %}List-products{% endblock %}</title>
+{% block content %}
+<nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+  <a href="{% url 'register_product' %}">register products/</a>
+  <a href="{% url 'delete-product' %}">delete/</a>
+  <a href="{% url 'update-product' %}">update/</a>
+  <a href="{% url 'stock_products' %}">stock/</a>
+  <a href="{% url 'main' %}">home</a>
+</nav>
+<nav class="mb-10 mx-15 my-15 text-blue-950 p-3 absolute top-5 right-30 text-xl">
+  <span class="text-blue-950">Total products: {{ total_products_save }}</span>
+</nav>
+<section
+  class="mx-20 my-30 grid grid-cols-1 grid-rows-1 justify-items-center items-center bg-white rounded-2xl w-[fit-content] h-[fit-content]">
+  <table class="grid mx-20 my-30 bg-blue-950 rounded-2xl text-gray-200 w-[fit-content] h-[fit-content]">
+    <thead>
+      <tr class="grid grid-cols-3 justify-items-center  bg-white text-xm text-blue-950">
+        <th>name</th>
+        <th class="w-50">price</th>
+        <th class="w-100">description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in allproducts %}
+      <tr class="grid grid-cols-3 justify-items-center p-2 italic">
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% include "footer.html" %}
+{% endblock %}

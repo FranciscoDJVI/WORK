@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+<title>{% block title%}main-admin{% endblock %}</title>
+{% block content %}
+<section class="flex">
+  <p class="flex-6 mx-10 my-10 text-2xl text-blue-950">Welcome to PSYS. This is an application for inventory management and product sales.</p>
+  <ul class="flex-1 grid justify-items-center my-10 text-xm text-blue-950 bg-white italic p-2 rounded-2xl">
+    {% if user.is_authenticated %}
+      {% for group in user.groups.all %}
+          <li> {{ group }}</li>
+        {% endfor %}
+      <li>Hola, {{ user.username }}!</li>
+    {% endif %}
+  </ul>
+  <form class="flex-1 grid justify-items-center mx-10 my-10 text-xm text-blue-950 bg-white p-2 rounded-2xl" method="post" action="{% url "login" %}">
+      {%  csrf_token %}
+      <button type="submit">Logout</button>
+  </form>
+ </section> 
+<div class="flex h-screen">
+  <section class="bg-white mt-10 absolute top-40 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10 p-4 rounded-2xl">Sell products <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}><i class="fa-solid fa-cart-plus"></i></a></span>
+    </section>
+  </div>
+  {% include 'footer.html'%}
+{% endblock %}

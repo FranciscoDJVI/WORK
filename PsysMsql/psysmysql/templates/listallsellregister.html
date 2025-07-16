@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load currency_filters %}
+{% block content %}
+<nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+  <a href="{% url 'list-product' %}">all products/</a>
+  <a href="{% url 'sell_product' %}">sell products/</a>
+  <a href="{% url 'delete-product' %}">delete/</a>
+  <a href="{% url 'update-product' %}">update/</a>
+  <a href="{% url 'stock_products' %}">stock/</a>
+  <a href="{% url 'main' %}">home</a>
+</nav>
+<table class="bg-blue-950 mx-40 my-30 rounded-2xl  text-gray-200 text-xm" <thead>
+  <tr class="grid grid-cols-6 justify-items-center bg-white text-xm text-blue-950">
+    <th class="w-20">date</th>
+    <th class="w-20">employed</th>
+    <th class="w-20">total</th>
+    <th class="w-20">type pay</th>
+    <th class="w-20">state sell</th>
+    </t>
+    </thead>
+    <tbody>
+      {% for item2 in list %}
+      <tr class="grid grid-cols-6 grid-rows-1 justify-items-center mx-5 italic ">
+        <td class="w-50">{{ item2.date }}</td>
+        <td>{{ item2.id_employed }}</td>
+        <td>{{ item2.total_sell|format_currency_cop }}</td>
+        <td>{{ item2.type_pay}}</td>
+        <td>{{ item2.state_sell}}</td>
+        <td><a href="{% url 'list_detail_sell_register' item2.idsell %}" class="text-gray-200 hover:text-gray-950">
+            <i class="fa-solid fa-eye mx-5"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

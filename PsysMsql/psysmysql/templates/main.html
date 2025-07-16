@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+<title>{% block title%}main{% endblock %}</title>
+{% block content %}
+<p class="mx-10 my-10 text-2xl text-blue-950">Welcome to PSYS. This is an application for inventory management and
+  product sales.</p>
+<div class="flex">
+  <section
+    class="flex-1 h-screen w-100 bg-blue-950 mx-10 mb-10 grid grid-cols-1 grid-rows-1 justify-items-center items-center p-4 text-gray-400 text-xl rounded-2xl">
+    <section class="bg-white mt-10 absolute top-20 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10 p-4 rounded-2xl">Register products <a
+          class="rounded-4xl  p-2 text-lg font-extrabold" href={% url 'register_product' %}>+</a></span>
+    </section>
+    <section class="bg-white mt-10 absolute top-40 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10 p-4 rounded-2xl">Sell products <a
+          class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}>+</a></span>
+    </section>
+    <aside class="flex-3 mr-10 mb-10 border border-blue-950 p-2 rounded-2xl">
+      <h1>coming soon...</h1>
+    </aside>
+    <nav>
+      <ul>
+        {% if user.is_authenticated %}
+        <li>Hola, {{ user.username }}!</li>
+        {% endif %}
+      </ul>
+      <form method="post" action="{% url " login" %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+</div>
+{% include 'footer.html'%}
+{% endblock %}
