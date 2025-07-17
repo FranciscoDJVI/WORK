@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "psysmysql.apps.PsysmysqlConfig",
     "django_vite",
     "users",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [

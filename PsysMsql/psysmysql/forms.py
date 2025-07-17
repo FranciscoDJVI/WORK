@@ -1,3 +1,4 @@
+from django.utils.text import phone2numeric
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
@@ -189,3 +190,71 @@ class RegisterSellDetailForm(forms.ModelForm):
                 }
             ),
         }
+
+class ClientsForm(forms.ModelForm):
+    
+    class Meta:
+        model = models.Clients
+        fields = "__all__"
+        labels = {
+            "name":"",
+            "email":"",
+            "direction":"",
+            "telephone":"",
+            "nit":"",
+            "country":"",
+            "departament":"",
+            "city":"",
+            
+        }
+        widgets = {
+            "name": forms.TextInput(
+                attrs = {
+                    "placeholder":"name/enterprise",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs = {
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "direction": forms.TextInput(
+                attrs = {
+                    "placeholder":"direction",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "telephone": forms.TextInput(
+                attrs = {
+                    "placeholder":"telephone",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "nit": forms.TextInput(
+                attrs = {
+                    "placeholder":"nit",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "country": forms.TextInput(
+                attrs = {
+                    "placeholder":"country",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "departament": forms.TextInput(
+                attrs = {
+                    "placeholder":"departament",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            "city": forms.TextInput(
+                attrs = {
+                    "placeholder":"city",
+                    "class":"border border-blue-950 p-2 m-5"
+                }
+            ),
+            
+        }
+        

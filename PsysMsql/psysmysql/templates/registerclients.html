@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="bg-white grid justify-items-center p-4 mx-100 my-10 text-xm text-blue-950 italic font-extrabold">
+    <form method="post" class="grid gri grid-rows-9 items-center">
+        {%csrf_token%}
+        {{ formclients }}
+        <button class="bg-blue-950 text-white rounded-2xl  p-2" type="submit">register</button>
+    </form>
+</section>
+{% endblock%}

@@ -17,6 +17,7 @@ urlpatterns = [
     path("sell-product/", views.sell_product, name="sell_product"),
     path("delete-sell-item/<int:pk>/", views.delete_sell_item, name="delete_sell_item"),
     path("stock-products/", views.register_stock, name="stock_products"),
+    path("register-clients/", views.register_clients, name="register_client"),
     path(
         "list-all-sell-register/",
         views.listallsellregisterview,

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Products(models.Model):
     idproducts = models.AutoField(primary_key=True)
@@ -198,6 +198,7 @@ class RegistersellDetail(models.Model):
     state_sell = models.CharField(max_length=150)
     notes = models.TextField(max_length=200, blank=True, null=True)
     detail_sell = models.TextField()
+    
     class Meta:
         verbose_name = "Register_sell"
         verbose_name_plural = "Register_sells"
@@ -206,3 +207,22 @@ class RegistersellDetail(models.Model):
 
     def __str__(self):
         return self.id_employed
+
+
+class Clients(models.Model):
+    name = models.CharField(max_length=200)
+    email= models.EmailField(max_length=150, null=False, unique=True, default="no-email@example.com")
+    direction = models.CharField(max_length=100)
+    telephone = PhoneNumberField(blank=True, null=True, unique=True)
+    nit = models.CharField(max_length=100)  
+    country = models.CharField(max_length=100)  
+    departament = models.CharField(max_length=100)  
+    city = models.CharField(max_length=100)  
+
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"
+        db_table = "clients"
+
+    def __str__(self):
+        return self.name

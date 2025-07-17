@@ -11,6 +11,7 @@ from .models import Sell
 from .models import SellProducts
 from .models import Stock
 from .models import RegistersellDetail
+from .models import Clients
 from django.contrib.auth.models import User, Group
 
 # FORMS
@@ -22,6 +23,8 @@ from .forms import StockForm
 from .forms import SentSellForm
 from .forms import AssginUserToGroupForm
 from .forms import RegisterSellDetailForm
+from .forms import ClientsForm
+
 
 
 # Comprobación de tipo de usuario.
@@ -524,3 +527,37 @@ def assign_user_to_group(request):
     }
 
     return render(request, "assing_user.html", context)
+
+
+def register_clients(request):
+    if request.method == "POST":
+        formclients = ClientsForm(request.POST)
+        if formclients.is_valid():
+            name = formclients.cleaned_data["name"]
+            email = formclients.cleaned_data["email"]
+            direction= formclients.cleaned_data["direction"]
+            telephone = formclients.cleaned_data["telephone"]
+            nit = formclients.cleaned_data["nit"]
+            country = formclients.cleaned_data["country"]
+            departament = formclients.cleaned_data["departament"]
+            city = formclients.cleaned_data["city"]
+            
+            new_client = Clients(
+                name = name,
+                email = email,
+                direction = direction,
+                nit = nit,
+                telephone = telephone,
+                country = country,
+                departament = departament,
+                city = city
+            )
+            
+            new_client.save()
+
+            return redirect("register_client")
+        else:
+            return redirect("register_client")
+    else:
+        formclients = ClientsForm()
+        return render(request,"registerclients.html", {"formclients": formclients})
