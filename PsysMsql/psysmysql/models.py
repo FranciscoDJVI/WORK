@@ -27,7 +27,7 @@ class Sell(models.Model):
     totalsell = models.IntegerField(
         db_column="totalSell", blank=True, null=True
     )  # Field name made lowercase.
-    id_product = models.ForeignKey(Products, models.DO_NOTHING, db_column="id_product")
+    id_product = models.ForeignKey(Products, on_delete=models.CASCADE, db_column="id_product")
 
     class Meta:
         managed = True
@@ -62,7 +62,7 @@ class Stock(models.Model):
     idstock = models.AutoField(primary_key=True)
     quantitystock = models.IntegerField()
     id_products = models.ForeignKey(
-        Products, models.DO_NOTHING, db_column="id_Products"
+        Products, on_delete=models.CASCADE, db_column="id_Products"
     )  # Field name made lowercase.
 
     class Meta:
