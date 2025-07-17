@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+
 from . import views
 
 urlpatterns = [
@@ -14,7 +15,7 @@ urlpatterns = [
     path("delete-product-done/", views.delete_product_done, name="delete-product-done"),
     path("update-product/", views.update_product, name="update-product"),
     path("update_product-done/", views.update_product_done, name="update_product_done"),
-    path("sell-product/", views.sell_product, name="sell_product"),
+    path("sell-product/", views.SellProductView.as_view(), name="sell_product"),
     path("delete-sell-item/<int:pk>/", views.delete_sell_item, name="delete_sell_item"),
     path("stock-products/", views.register_stock, name="stock_products"),
     path("register-clients/", views.register_clients, name="register_client"),

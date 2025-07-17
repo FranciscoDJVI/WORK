@@ -1,9 +1,15 @@
+from tempfile import template
+from types import NoneType
+from django.db.models.sql.query import Query
 import json
 from django.contrib import messages
 from django.db import DatabaseError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models import Q
+from django.views import View 
+from django.utils.decorators import method_decorator
 
 # MODELS
 from .models import Products
@@ -18,6 +24,7 @@ from django.contrib.auth.models import User, Group
 from .forms import ProductForm
 from .forms import DeleteProductForm
 from .forms import SearchProduct
+from .forms import SearchEmailForm
 from .forms import SellForm
 from .forms import StockForm
 from .forms import SentSellForm
@@ -206,202 +213,263 @@ def update_product_done(request):
 
 
 # Ventas
-@login_required
-@permission_required("psysmysql.add_sell", login_url="login")
-def sell_product(request):
-    formsell = SellForm()
-    sentform = SentSellForm()
+@method_decorator([
+    login_required(login_url="login"), # Asegura que el usuario esté logueado
+    permission_required("psysmysql.add_sell", login_url="login") # Revisa el permiso
+], name='dispatch')
+class SellProductView(View):
+    template_name = "sellproduct.html"
 
-    if request.method == "POST":
+    # El método dispatch ya no necesita ser sobreescrito manualmente si usas @method_decorator correctamente
+    # @method_decorator([]) arriba se encarga de envolverlo automáticamente.
+    # Si quieres una lógica de dispatch más compleja, puedes mantenerlo y aplicar los decoradores dentro.
+    # Pero para este caso, con @method_decorator en la clase es suficiente.
+    # def dispatch(self, request, *args, **kwargs):
+    #    return super().dispatch(request, *args, **kwargs) # Esto ya no es necesario aquí
+
+    def get_context_data(self, request): # Ahora recibe 'request' para la lógica de búsqueda
+        """
+        Método auxiliar para preparar el contexto que se enviará a la plantilla.
+        Ahora centraliza la lógica para GET y maneja la búsqueda de clientes.
+        """
+        formsell = SellForm()
+        sentform = SentSellForm()
+        formregsitersell = RegisterSellDetailForm()
+        list_sell_products = SellProducts.objects.all()
+
+        list_items = []
+        total_acumulado_temp = 0
+
+        for item in list_sell_products:
+            item_total = item.quantity * item.priceunitaty
+            total_acumulado_temp += item_total
+
+            list_items.append(
+                {
+                    "id_product": item.idproduct.pk,
+                    "name": item.idproduct.name,
+                    "quantity": item.quantity,
+                    "price": float(item.priceunitaty),
+                    "pricexquantity": float(item_total),
+                }
+            )
+
+        # Cálculo de totales finales para la plantilla
+        quantity_dict = sum(item['quantity'] for item in list_items)
+        price_dict = sum(item['price'] for item in list_items)
+        price_x_quantity = sum(item['pricexquantity'] for item in list_items)
+
+        # --- Lógica de búsqueda integrada aquí ---
+        formsearch = SearchEmailForm(request.GET or None) # Pasa request.GET
+        search_results = []
+        search_query = None # Usar None en lugar de NoneType, que es el tipo
+
+        if formsearch.is_valid():
+            search_query = formsearch.cleaned_data["query"]
+            if search_query: # Solo busca si la consulta no está vacía
+                search_results = Clients.objects.filter(Q(email__icontains=search_query)).distinct()
+        # --- Fin de la lógica de búsqueda ---
+
+        context = {
+            "formsell": formsell,
+            "sentform": sentform,
+            "formregsitersell": formregsitersell,
+            "list_sell_products": list_sell_products,
+            "list_items_json": json.dumps(list_items),
+            "quantity": quantity_dict,
+            "price": price_dict,
+            "price_x_quantity": price_x_quantity,
+            # Agrega los elementos de búsqueda al contexto
+            "formsearch": formsearch,
+            "search_query": search_query, # La consulta que el usuario ingresó
+            "search_results": search_results, # Los resultados de la búsqueda
+        }
+        return context
+
+    def get(self, request, *args, **kwargs):
+        """Maneja las solicitudes GET (cuando se carga la página inicialmente)."""
+        context = self.get_context_data(request) # ¡Pasa 'request' al método get_context_data!
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        """Maneja las solicitudes POST (cuando se envía un formulario)."""
+
         if "sell" in request.POST:
-            formsell = SellForm(request.POST)
-            if formsell.is_valid():
-                totalsell = formsell.cleaned_data["totalsell"]
-                idproduct = formsell.cleaned_data["id_product"]
-
-                try:
-                    productsell = Sell(
-                        totalsell=totalsell,
-                        id_product=idproduct,
-                    )
-                    productsell.save()
-
-                except Exception as e:
-                    messages.error(request, f"Error al registrar la venta: {e}")
-
-                return redirect("sell_product")
-            else:
-                for field, errors in formsell.errors.items():
-                    for error in errors:
-                        messages.error(request, f"Error en '{field}': {error}")
-                return redirect("sell_product")
-
+            return self._handle_sell_form(request)
         elif "sent" in request.POST:
-
-            sentform = SentSellForm(request.POST)
-
-            if sentform.is_valid():
-
-                productsell = Sell.objects.all()
-
-                # serializacion(conversion de los datos a formato Json).
-                data = []
-                for items in productsell:
-                    data.append(
-                        {
-                            "id": items.idsell,
-                            "dateSell": timezone.localtime(items.datesell).isoformat(),
-                            "totalsell": items.totalsell,
-                            "id_product": items.id_product_id,
-                        }
-                    )
-                request.session["data_json_sell"] = data
-
-                all_data = request.session.get("data_json_sell")
-                for item in all_data:
-                    product_id = item["id_product"]
-                    quantity = item["totalsell"]
-                    if not product_id or quantity is None:
-                        messages.error(
-                            request,
-                            f"Faltan datos para enviar el producto (ID {product_id} de producto o cantidad{quantity}).",
-                        )
-                        return redirect("sell_product")
-                    try:
-                        product_stock = Stock.objects.get(id_products=product_id)
-                        if product_stock.quantitystock == 0:
-                            messages.error(
-                                request, "El stock de este producto es cero."
-                            )
-                        elif product_stock.quantitystock < quantity:
-                            messages.warning(
-                                request,
-                                f"Solo quedan {product_stock.quantitystock} unidades en stock. No se pudo enviar {product_id} unidades.",
-                            )
-                        else:
-                            # Disminución de la cantidad del producto en stock.
-                            product_stock.quantitystock -= quantity
-                            product_stock.save()
-                            # Eliminación de los datos en la tabla sell_products para que al enviar la venta no muestre los datos en la plantilla.
-                            SellProducts.objects.all().delete()
-                    except DatabaseError as e:
-                        messages.error(
-                            request,
-                            f"Error en la base de datos al actualizar stock: {e}",
-                        )
-                    except Exception as e:
-                        messages.error(request, f"Ocurrió un error inesperado: {e}")
-                return redirect("sell_product")
-            else:
-                for field, errors in sentform.errors.items():
-                    for error in errors:
-                        messages.error(
-                            request,
-                            f"Error en el formulario de envío '{field}': {error}",
-                        )
-                return redirect("sell_product")
+            return self._handle_sent_form(request)
         elif "add" in request.POST:
-            formregsitersell = RegisterSellDetailForm(request.POST)
-            if formregsitersell.is_valid():
-                type_pay = formregsitersell.cleaned_data["type_pay"]
-                state_sell = formregsitersell.cleaned_data["state_sell"]
-                notes = formregsitersell.cleaned_data["notes"]
-
-                list_sell_products = SellProducts.objects.all()
-
-                items = {}
-                list_items = []
-                total = 0
-                # serializacion para pasar los datos de la instancia en formato Json.
-                for item in list_sell_products:
-                    total += item.quantity * item.priceunitaty
-                    items = {
-                        "id_product": item.idproduct.pk,
-                        "name": item.idproduct.name,
-                        "quantity": item.quantity,
-                        "price": float(item.priceunitaty),
-                        "pricexquantity": float(item.quantity * item.priceunitaty),
-                        "total_sell": float(total),
-                    }
-                    list_items.append(items)
-                quantity_dict = 0
-                price_dcit = 0
-                price_x_quantity = 0
-                id_employed = None
-                for item in list_items:
-                    quantity_dict += item["quantity"]
-                    price_dcit += item["price"]
-                    price_x_quantity += item["pricexquantity"]
-
-                    id_employed = request.user.username
-                register_sell = RegistersellDetail(
-                    id_employed=id_employed,
-                    total_sell=price_x_quantity,
-                    type_pay=type_pay,
-                    state_sell=state_sell,
-                    notes=notes,
-                    detail_sell=json.dumps(list_items),
-                )
-                register_sell.save()
-                return redirect("sell_product")
-            else:
-                for field, errors in RegisterSellDetailForm.errors.items():
-                    for error in errors:
-                        messages.error(
-                            request,
-                            f"Error en el formulario de envío '{field}': {error}",
-                        )
-                return redirect("sell_product")
-
+            return self._handle_add_form(request)
         else:
             messages.error(
                 request,
                 "Acción POST no reconocida. Asegúrate de que el botón tenga un atributo 'name'.",
             )
+            # Si no se reconoce la acción, se vuelve a renderizar la página con el contexto actual.
+            # Esto es mejor que un redirect vacío para mantener los datos de los formularios.
+            context = self.get_context_data(request)
+            return render(request, self.template_name, context)
+
+    def _handle_sell_form(self, request):
+        """Lógica para el formulario 'sell'."""
+        formsell = SellForm(request.POST)
+        if formsell.is_valid():
+            totalsell = formsell.cleaned_data["totalsell"]
+            idproduct = formsell.cleaned_data["id_product"]
+
+            try:
+                productsell = Sell(
+                    totalsell=totalsell,
+                    id_product=idproduct,
+                )
+                productsell.save()
+                messages.success(request, "Venta registrada exitosamente.")
+            except Exception as e:
+                messages.error(request, f"Error al registrar la venta: {e}")
+            return redirect("sell_product")
+        else:
+            for field, errors in formsell.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error en '{field}': {error}")
             return redirect("sell_product")
 
-    else:
-        formsell = SellForm()
-        sentform = SentSellForm()
-        formregsitersell = RegisterSellDetailForm()
-        list_sell_products = SellProducts.objects.all()
-        items = {}
-        list_items = []
-        total = 0
-        for item in list_sell_products:
-            total += item.quantity * item.priceunitaty
-            items = {
-                "id_product": item.idproduct.pk,
-                "name": item.idproduct.name,
-                "quantity": item.quantity,
-                "price": float(item.priceunitaty),
-                "pricexquantity": float(item.quantity * item.priceunitaty),
-                "total_sell": float(total),
-            }
-            list_items.append(items)
-        quantity_dict = 0
-        price_dict = 0
-        price_x_quantity = 0
-        id_employed = None
-        for item in list_items:
-            quantity_dict += item["quantity"]
-            price_dict += item["price"]
-            price_x_quantity += item["pricexquantity"]
-            print(item)
-        return render(
-            request,
-            "sellproduct.html",
-            {
-                "formsell": formsell,
-                "sentform": sentform,
-                "formregsitersell": formregsitersell,
-                "list_sell_products": list_sell_products,
-                "quantity": quantity_dict,
-                "price": price_dict,
-                "price_x_quantity": price_x_quantity,
-            },
-        )
+    def _handle_sent_form(self, request):
+        """Lógica para el formulario 'sent'."""
+        sentform = SentSellForm(request.POST)
 
+        if sentform.is_valid():
+            productsell = Sell.objects.all()
+
+            data = []
+            for item in productsell:
+                data.append(
+                    {
+                        "id": item.idsell,
+                        "dateSell": timezone.localtime(item.datesell).isoformat(),
+                        "totalsell": item.totalsell,
+                        "id_product": item.id_product_id,
+                    }
+                )
+            request.session["data_json_sell"] = data
+
+            all_data = request.session.get("data_json_sell", [])
+            client_email_to_send = request.POST.get('client_email_to_send') # Obtén el correo del campo oculto
+
+            # Asunto y mensaje del correo
+            email_subject = "Confirmación de Venta - Su Compra"
+            email_message = "Gracias por su compra. Sus productos han sido enviados."
+            # Aquí podrías construir un mensaje más detallado usando `all_data` o los `SellProducts`
+
+
+            for item in all_data:
+                product_id = item["id_product"]
+                quantity = item["totalsell"]
+                if not product_id or quantity is None:
+                    messages.error(
+                        request,
+                        f"Faltan datos para enviar el producto (ID {product_id} de producto o cantidad{quantity}).",
+                    )
+                    return redirect("sell_product")
+                try:
+                    product_stock = Stock.objects.get(id_products=product_id)
+                    if product_stock.quantitystock == 0:
+                        messages.error(
+                            request, f"El stock del producto ID {product_id} es cero."
+                        )
+                    elif product_stock.quantitystock < quantity:
+                        messages.warning(
+                            request,
+                            f"Solo quedan {product_stock.quantitystock} unidades del producto ID {product_id} en stock. No se pudo enviar {quantity} unidades.",
+                        )
+                    else:
+                        product_stock.quantitystock -= quantity
+                        product_stock.save()
+                        messages.success(request, f"Stock de producto ID {product_id} actualizado.")
+
+                except Stock.DoesNotExist:
+                    messages.error(request, f"Producto ID {product_id} no encontrado en stock.")
+                except DatabaseError as e:
+                    messages.error(
+                        request,
+                        f"Error en la base de datos al actualizar stock para el producto ID {product_id}: {e}",
+                    )
+                except Exception as e:
+                    messages.error(request, f"Ocurrió un error inesperado para el producto ID {product_id}: {e}")
+
+            SellProducts.objects.all().delete()
+            messages.success(request, "Proceso de envío de ventas completado.")
+            if client_email_to_send:
+                send_sell_confirmation_email.delay(client_email_to_send, email_subject, email_message)
+                messages.info(request, f"Se inició el envío de correo de confirmación a {client_email_to_send}.")
+            else:
+                messages.warning(request, "No se proporcionó un correo de cliente para enviar la confirmación.")
+
+            return redirect("sell_product")
+        else:
+            for field, errors in sentform.errors.items():
+                for error in errors:
+                    messages.error(
+                        request,
+                        f"Error en el formulario de envío '{field}': {error}",
+                    )
+            return redirect("sell_product")
+
+    def _handle_add_form(self, request):
+        """Lógica para el formulario 'add'."""
+        formregsitersell = RegisterSellDetailForm(request.POST)
+        if formregsitersell.is_valid():
+            type_pay = formregsitersell.cleaned_data["type_pay"]
+            state_sell = formregsitersell.cleaned_data["state_sell"]
+            notes = formregsitersell.cleaned_data["notes"]
+
+            list_sell_products = SellProducts.objects.all()
+
+            list_items = []
+            total_sale_calculated = 0
+
+            for item in list_sell_products:
+                item_total = item.quantity * item.priceunitaty
+                total_sale_calculated += item_total
+
+                list_items.append(
+                    {
+                        "id_product": item.idproduct.pk,
+                        "name": item.idproduct.name,
+                        "quantity": item.quantity,
+                        "price": float(item.priceunitaty),
+                        "pricexquantity": float(item_total),
+                    }
+                )
+
+            id_employed = request.user.username if request.user.is_authenticated else "anonymous"
+
+            register_sell = RegistersellDetail(
+                id_employed=id_employed,
+                total_sell=total_sale_calculated,
+                type_pay=type_pay,
+                state_sell=state_sell,
+                notes=notes,
+                detail_sell=json.dumps(list_items),
+            )
+            try:
+                register_sell.save()
+                messages.success(request, "Detalle de venta registrado exitosamente.")
+            except DatabaseError as e:
+                messages.error(request, f"Error en la base de datos al registrar el detalle de venta: {e}")
+            except Exception as e:
+                messages.error(request, f"Ocurrió un error inesperado al registrar el detalle de venta: {e}")
+
+            return redirect("sell_product")
+        else:
+            for field, errors in formregsitersell.errors.items():
+                for error in errors:
+                    messages.error(
+                        request,
+                        f"Error en el formulario de registro de venta '{field}': {error}",
+                    )
+            return redirect("sell_product")
+
+        
 
 def listallsellregisterview(request):
     listallregister = RegistersellDetail.objects.all()
@@ -561,3 +629,5 @@ def register_clients(request):
     else:
         formclients = ClientsForm()
         return render(request,"registerclients.html", {"formclients": formclients})
+    
+    

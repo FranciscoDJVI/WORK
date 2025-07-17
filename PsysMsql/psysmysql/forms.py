@@ -258,3 +258,6 @@ class ClientsForm(forms.ModelForm):
             
         }
         
+
+class SearchEmailForm(forms.Form):
+    query = forms.CharField(label="Buscar",max_length=100)
