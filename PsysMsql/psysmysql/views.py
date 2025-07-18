@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.views import View 
 from django.utils.decorators import method_decorator
+from .tasks import send_sell_confirmation_email
 
 # MODELS
 from .models import Products
@@ -353,8 +354,7 @@ class SellProductView(View):
             request.session["data_json_sell"] = data
 
             all_data = request.session.get("data_json_sell", [])
-            client_email_to_send = request.POST.get('client_email_to_send') # Obtén el correo del campo oculto
-
+            client_email_to_send = request.POST.get('client_email_selected') # Obtén el correo del campo oculto
             # Asunto y mensaje del correo
             email_subject = "Confirmación de Venta - Su Compra"
             email_message = "Gracias por su compra. Sus productos han sido enviados."
