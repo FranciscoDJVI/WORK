@@ -324,7 +324,6 @@ class SellProductView(View):
                     id_product=idproduct,
                 )
                 productsell.save()
-                messages.success(request, "Venta registrada exitosamente.")
             except Exception as e:
                 messages.error(request, f"Error al registrar la venta: {e}")
             return redirect("sell_product")
@@ -357,7 +356,7 @@ class SellProductView(View):
             client_email_to_send = request.POST.get('client_email_selected') # Obtén el correo del campo oculto
             # Asunto y mensaje del correo
             email_subject = "Confirmación de Venta - Su Compra"
-            email_message = "Gracias por su compra. Sus productos han sido enviados."
+            email_message = str(all_data)
             # Aquí podrías construir un mensaje más detallado usando `all_data` o los `SellProducts`
 
 
@@ -384,7 +383,6 @@ class SellProductView(View):
                     else:
                         product_stock.quantitystock -= quantity
                         product_stock.save()
-                        messages.success(request, f"Stock de producto ID {product_id} actualizado.")
 
                 except Stock.DoesNotExist:
                     messages.error(request, f"Producto ID {product_id} no encontrado en stock.")
@@ -453,7 +451,6 @@ class SellProductView(View):
             )
             try:
                 register_sell.save()
-                messages.success(request, "Detalle de venta registrado exitosamente.")
             except DatabaseError as e:
                 messages.error(request, f"Error en la base de datos al registrar el detalle de venta: {e}")
             except Exception as e:

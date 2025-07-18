@@ -260,4 +260,8 @@ class ClientsForm(forms.ModelForm):
         
 
 class SearchEmailForm(forms.Form):
-    query = forms.CharField(label="Buscar",max_length=100)
+    query = forms.CharField(
+        label="Buscar",max_length=100,
+        widget=forms.TextInput(attrs={"class":"bg-white italic text-black font-extrabold rounded-2xl p-1"})
+        )
+    

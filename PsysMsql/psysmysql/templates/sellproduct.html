@@ -20,7 +20,7 @@
   <aside class="h-[fit-contect] w-[fit-content] bg-white p-2 mb-10 rounded-3xl">
     {% include "listsellproducts.html" %}
   </aside>
-  <section class="bg-white grid  grid-cols-1 grid-rows-1 gap-2 justify-items-center items-center">
+  <section class="bg-white grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center">
     <form method="post"
       class="bg-white my-20  grid grid-cols-4 grid-rows-1 justify-items-center items-center rounded-2xl">
       {% csrf_token %}
@@ -28,52 +28,57 @@
       <button id="add" name="add" type="submit"
         class="bg-green-700  text-xl text-gray-200 rounded-2xl  p-2">add</button>
     </form>
-    <form method="post">
-      {% csrf_token %}
-      {{ sentform }}
-      <button id="sent" name="sent" type="submit"
-        class="bg-green-700  text-xl text-gray-200 rounded-2xl mb-10  p-2">Sent sell</button>
-    
-      <div class="form-group" style="margin-top: 20px;">
-      <label for="id_client_email_selected">Correo del Cliente Seleccionado (para envío de correo):</label>
-      <input type="email" id="id_client_email_selected" name="client_email_selected" placeholder="ejemplo@dominio.com"
-        readonly style="background-color: #f0f0f0;">
-      <small>Este campo se llenará automáticamente al hacer clic en un correo de la búsqueda.</small>
-    </div>
+    <div class="bg-gray-200 grid grid-cols-1 my-10 text-xl text-black font-extralight p-2 rounded-3xl">
+      <form method="post">
+        {% csrf_token %}
+        {{ sentform }}
+        <div class="form-group" style="margin-top: 20px;">
+          <label for="id_client_email_selected">Correo para envío de confirmación de venta:</label>
+          <input type="email" id="id_client_email_selected" name="client_email_selected"
+            placeholder="ejemplo@dominio.com" readonly class="italic font-extrabold">
+        </div>
+        <button id="sent" name="sent" type="submit"
+          class="bg-green-700  text-xl text-gray-200 rounded-2xl mb-10  p-2 absolute right-25 ">sent</button>
       </form>
-  </section>
-  <div class="section">
-    <h2>Búsqueda de Clientes por Correo</h2>
-    <form action="" method="GET" class="search-form-inline">
-      <div class="form-group">
-        <label for="{{ formsearch.query.id_for_label }}">Buscar Correo:</label>
-        {{ formsearch.query }}
-        {% if formsearch.query.help_text %}<small>{{ formsearch.query.help_text }}</small>{% endif %}
-        {% for error in formsearch.query.errors %}<span style="color: red;">{{ error }}</span>{% endfor %}
-      </div>
-      <button type="submit">Buscar Cliente</button>
-    </form>
+      <div class="section">
+        <h2>Búsqueda de Clientes(Correo)</h2>
+        <form action="" method="GET" class="search-form-inline">
+          <div class="form-group">
+            <label for="{{ formsearch.query.id_for_label }}">Correo:</label>
+            {{ formsearch.query }}
+            {% if formsearch.query.help_text %}<small>{{ formsearch.query.help_text }}</small>{% endif %}
+            {% for error in formsearch.query.errors %}<span style="color: red;">{{ error }}</span>{% endfor %}
+          </div>
+          <button type="submit">Buscar</button>
+        </form>
 
-    <div class="search-results">
-      {% if search_query %}
-      <h3>Resultados para "{{ search_query }}"</h3>
-      {% if search_results %}
-      {% for client in search_results %}
-      <div class="client-item">
-        <p><strong>Correo:</strong> <span class="client-email-copy" data-email="{{ client.email }}" style="cursor: pointer; text-decoration: underline; color: blue;">{{ client.email }}</span></p>
-        {% if client.name %}<p><strong>Nombre:</strong> {{ client.name }}</p>{% endif %}
-        {% if client.telephone %}<p><strong>Teléfono:</strong> {{ client.telephone }}</p>{% endif %}
+        <div class="search-results">
+          {% if search_query %}
+          <h3>Resultados para "{{ search_query }}"</h3>
+          {% if search_results %}
+          {% for client in search_results %}
+          <div class="client-item">
+            <p><strong>Correo:</strong> <span class="client-email-copy" data-email="{{ client.email }}"
+                style="cursor: pointer; text-decoration: underline; color: blue;">{{ client.email }}</span></p>
+            {% if client.name %}<p>Nombre: {{ client.name }}</p>{% endif %}
+            {% if client.telephone %}<p>Teléfono: {{ client.telephone }}</p>{% endif %}
+            {% if client.direction %}<p>Dirección: {{ client.direction }}</p>{% endif %}
+            {% if client.nit %}<p>Nit: {{ client.nit }}</p>{% endif %}
+            {% if client.country %}<p>País: {{ client.country }}</p>{% endif %}
+            {% if client.departament %}<p>Departamento: {{ client.departament }}</p>{% endif %}
+            {% if client.city %}<p>Ciudad: {{ client.city }}</p>{% endif %}
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="no-results">No se encontraron clientes con el correo "{{ search_query }}".</p>
+          {% endif %}
+          {% else %}
+          <p class="no-results">Usa la barra de búsqueda para encontrar clientes por correo electrónico.</p>
+          {% endif %}
+        </div>
       </div>
-      {% endfor %}
-      {% else %}
-      <p class="no-results">No se encontraron clientes con el correo "{{ search_query }}".</p>
-      {% endif %}
-      {% else %}
-      <p class="no-results">Usa la barra de búsqueda para encontrar clientes por correo electrónico.</p>
-      {% endif %}
     </div>
-  
-  </div>
+  </section>
 </section>
 {% if messages %}
 <div id="messages" class="bg-blue-950 text-2xl text-gray-200 absolute bottom-10 right-10 rounded-4xl italic p-10">
@@ -95,7 +100,7 @@
     }
   });
 
-    document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     console.log("¡DOMContentLoaded se ha disparado!"); // Confirma que el script se está ejecutando
 
     const emailSpans = document.querySelectorAll('.client-email-copy');
@@ -108,29 +113,28 @@
     console.log("Campo oculto 'hidden_client_email_selected' encontrado:", hiddenEmailInput); // ¡ESTE ES EL CLAVE!
 
     if (hiddenEmailInput === null) {
-        console.error("⛔️ ERROR: hiddenEmailInput es NULL. El elemento con ID 'hidden_client_email_selected' NO fue encontrado en el DOM.");
+      console.error("⛔️ ERROR: hiddenEmailInput es NULL. El elemento con ID 'hidden_client_email_selected' NO fue encontrado en el DOM.");
     } else {
-        console.log("✅ hiddenEmailInput encontrado. ¡Todo bien para manipularlo!");
+      console.log("✅ hiddenEmailInput encontrado. ¡Todo bien para manipularlo!");
     }
 
     emailSpans.forEach(span => {
-        span.addEventListener('click', function() {
-            const email = this.dataset.email;
-            console.log("Se hizo clic en el correo:", email); // ¿El evento click se dispara?
-            if (selectedEmailInput) { // Añadimos una comprobación por si selectedEmailInput también fuera null
-                selectedEmailInput.value = email;
-                console.log("Valor del campo visible actualizado a:", selectedEmailInput.value);
-            }
-            if (hiddenEmailInput) { // Añadimos una comprobación para evitar el error si es null
-                hiddenEmailInput.value = email;
-                console.log("Valor del campo OCULTO actualizado a:", hiddenEmailInput.value);
-            } else {
-                console.warn("Advertencia: No se pudo actualizar hiddenEmailInput porque es null.");
-            }
-            alert('Correo copiado: ' + email);
-        });
+      span.addEventListener('click', function () {
+        const email = this.dataset.email;
+        console.log("Se hizo clic en el correo:", email); // ¿El evento click se dispara?
+        if (selectedEmailInput) { // Añadimos una comprobación por si selectedEmailInput también fuera null
+          selectedEmailInput.value = email;
+          console.log("Valor del campo visible actualizado a:", selectedEmailInput.value);
+        }
+        if (hiddenEmailInput) { // Añadimos una comprobación para evitar el error si es null
+          hiddenEmailInput.value = email;
+          console.log("Valor del campo OCULTO actualizado a:", hiddenEmailInput.value);
+        } else {
+          console.warn("Advertencia: No se pudo actualizar hiddenEmailInput porque es null.");
+        }
+      });
     });
-});
+  });
 </script>
 {% include "footer.html" %}
 {% endblock %}
