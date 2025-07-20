@@ -139,7 +139,7 @@ def delete_product_done(request):
     return render(request, "deleteproductdone.html")
 
 
-@login_required
+"""@login_required
 @permission_required("psysmysql.change_products", login_url="error")
 def update_product(request):
     formsearch = SearchProduct()
@@ -206,9 +206,137 @@ def update_product(request):
             "formupdate": formupdate,
             "productsearch": productsearch,
         },
-    )
+    )"""
+@method_decorator([
+    login_required(login_url="login"), # Asegura que el usuario esté logueado
+    permission_required("psysmysql.change_product", login_url="login") # Revisa el permiso
+], name='dispatch')
+class Update(View):
+    template_name = "updateproduct.html"
+    
+    def get_context_data(self, request, formsearch=None, formupdate=None, productsearch=None):
+            if formsearch is None:
+                formsearch = SearchProduct()
+            if formupdate  is None:
+                formupdate = ProductForm()
+            
+            return  {
+                "form": formsearch,
+                "formupdate": formupdate,
+                "productsearch": productsearch,
+            }
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(request)
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        if "search" in request.POST:
+            return self._handle_search_product(request)
+        elif "update" in request.POST:
+            return self._handle_update_product(request)
+        else:
+            messages.error(
+                request,
+                "Acción POST no reconocida. Asegúrate de que el botón tenga un atributo 'name'.",
+            )
+            context = self.get_context_data(request)
+            return render(request, self.template_name, context)
+    
+    def _handle_search_product(self, request):
+            formsearch = SearchProduct(request.POST)
+            formupdate = ProductForm()
+            
+            
+            if formsearch.is_valid():
+                namesearch = formsearch.cleaned_data["name"]
+                productfound = Products.objects.get(name=namesearch)
+                print(productfound)
+                if productfound:
+                    productsearch = productfound # Obtén el objeto real
+                    request.session["original_name"] = namesearch
+                    messages.info(request, f"Producto '{namesearch}' encontrado. Puedes actualizarlo.")
+                
+                # ¡LA CLAVE ESTÁ AQUÍ! Inicializa formupdate con la instancia del producto encontrado
+                    formupdate = ProductForm(instance=productsearch)
+                else:
+                    messages.error(
+                        request, "No se encontraron productos con ese nombre."
+                    )
+                    productsearch = None
+            else:
+                messages.error(
+                    request,
+                    "Por favor, corrige los errores en el formulario de búsqueda.",
+                )
+            context = self.get_context_data(
+                    request,
+                    formsearch=formsearch,
+                    formupdate=formupdate,
+                    productsearch=productsearch,
+                    )
+            
+            return render(request,"updateproduct.html", context)
+    
+    def _handle_update_product(self, request):
+        original_name = request.session.get("original_name")
+        productsearch = None
+        
+        if not original_name:
+            messages.error(request, "No hay producto con ese nombre")
+            context = self.get_context_data(request)
+            return render(request, self.template_name, context)
+        
+            formupdate = ProductForm(request.POST)
+            formsearch = SearchProduct()
+            
+            if formupdate.is_valid():
+                    new_name = formupdate.cleaned_data["name"]
+                    new_price = formupdate.cleaned_data["price"]
+                    new_description = formupdate.cleaned_data["description"]
 
+                    original_name = request.session.get("original_name")
+                    try:
+                        productupdate = Products.objects.get(name=original_name)
+                        
+                        if productupdate:
+                            productupdate.name = new_name
+                            productupdate.price = new_price
+                            productupdate.description = new_description
+                            productupdate.save()
+                            messages.info(request, "Actualización exitosa")
+
+                            request.session["original_name"] = None
+                            productsearch = None
+                        else:
+                            messages.error(
+                                request,
+                                "Fallo en la Actualización: Producto no encontrado.",
+                            )
+
+                    except Exception as e:
+                        messages.error(request, f"Error durante la actualización: {e}")
+            else:
+                messages.error(
+                    request,
+                    "Por favor, corrige los errores en el formulario de actualización.",
+                )
+                if original_name:
+                    try:
+                        productsearch = Products.objects.get(name=original_name)
+                    except Products.DoesNotExist:
+                        productsearch = None
+                        
+            context = self.get_context_data(
+                    request,
+                    formsearch=formsearch,
+                    formupdate=formupdate,
+                    productsearch=productsearch,
+                    )
+            
+            return render(request,"updateproduct.html", context)
+
+    
 def update_product_done(request):
     return render(request, "updateproductdone.html")
 
@@ -220,13 +348,6 @@ def update_product_done(request):
 ], name='dispatch')
 class SellProductView(View):
     template_name = "sellproduct.html"
-
-    # El método dispatch ya no necesita ser sobreescrito manualmente si usas @method_decorator correctamente
-    # @method_decorator([]) arriba se encarga de envolverlo automáticamente.
-    # Si quieres una lógica de dispatch más compleja, puedes mantenerlo y aplicar los decoradores dentro.
-    # Pero para este caso, con @method_decorator en la clase es suficiente.
-    # def dispatch(self, request, *args, **kwargs):
-    #    return super().dispatch(request, *args, **kwargs) # Esto ya no es necesario aquí
 
     def get_context_data(self, request): # Ahora recibe 'request' para la lógica de búsqueda
         """
@@ -263,7 +384,7 @@ class SellProductView(View):
         # --- Lógica de búsqueda integrada aquí ---
         formsearch = SearchEmailForm(request.GET or None) # Pasa request.GET
         search_results = []
-        search_query = None # Usar None en lugar de NoneType, que es el tipo
+        search_query = None 
 
         if formsearch.is_valid():
             search_query = formsearch.cleaned_data["query"]
@@ -280,7 +401,7 @@ class SellProductView(View):
             "quantity": quantity_dict,
             "price": price_dict,
             "price_x_quantity": price_x_quantity,
-            # Agrega los elementos de búsqueda al contexto
+        
             "formsearch": formsearch,
             "search_query": search_query, # La consulta que el usuario ingresó
             "search_results": search_results, # Los resultados de la búsqueda

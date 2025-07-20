@@ -20,13 +20,13 @@
       </tr>
     </thead>
     <tbody>
-      {% for item in productsearch %}
-      <tr class="grid grid-cols-3 justify-items-center p-2 italic">
-        <td>{{ item.name }}</td>
-        <td>{{ item.price }}</td>
-        <td>{{ item.description }}</td>
-      </tr>
-      {% endfor %}
+      {% if productsearch %}
+      <h3>Detalles del Producto Encontrado:</h3>
+      <p><strong>Nombre:</strong> {{ productsearch.name }}</p>
+      <p><strong>Precio:</strong> {{ productsearch.price }}</p>
+      <p><strong>Descripción:</strong> {{ productsearch.description }}</p>
+      {% endif %}
+
     </tbody>
   </table>
   {% endblock %}
