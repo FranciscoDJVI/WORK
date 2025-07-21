@@ -207,9 +207,11 @@ def update_product(request):
             "productsearch": productsearch,
         },
     )"""
+
+# Clase para actualizar un producto.
 @method_decorator([
-    login_required(login_url="login"), # Asegura que el usuario esté logueado
-    permission_required("psysmysql.change_product", login_url="login") # Revisa el permiso
+    login_required(login_url="login"),
+    permission_required("psysmysql.change_product", login_url="login")
 ], name='dispatch')
 class Update(View):
     template_name = "updateproduct.html"
@@ -251,14 +253,14 @@ class Update(View):
             if formsearch.is_valid():
                 namesearch = formsearch.cleaned_data["name"]
                 productfound = Products.objects.get(name=namesearch)
-                print(productfound)
+            
                 if productfound:
                     productsearch = productfound # Obtén el objeto real
                     request.session["original_name"] = namesearch
-                    messages.info(request, f"Producto '{namesearch}' encontrado. Puedes actualizarlo.")
                 
                 # ¡LA CLAVE ESTÁ AQUÍ! Inicializa formupdate con la instancia del producto encontrado
                     formupdate = ProductForm(instance=productsearch)
+                    print(productfound)
                 else:
                     messages.error(
                         request, "No se encontraron productos con ese nombre."
@@ -287,10 +289,10 @@ class Update(View):
             context = self.get_context_data(request)
             return render(request, self.template_name, context)
         
-            formupdate = ProductForm(request.POST)
-            formsearch = SearchProduct()
+        formupdate = ProductForm(request.POST)
+        formsearch = SearchProduct()
             
-            if formupdate.is_valid():
+        if formupdate.is_valid():
                     new_name = formupdate.cleaned_data["name"]
                     new_price = formupdate.cleaned_data["price"]
                     new_description = formupdate.cleaned_data["description"]
@@ -316,7 +318,7 @@ class Update(View):
 
                     except Exception as e:
                         messages.error(request, f"Error durante la actualización: {e}")
-            else:
+        else:
                 messages.error(
                     request,
                     "Por favor, corrige los errores en el formulario de actualización.",
@@ -326,15 +328,14 @@ class Update(View):
                         productsearch = Products.objects.get(name=original_name)
                     except Products.DoesNotExist:
                         productsearch = None
-                        
-            context = self.get_context_data(
-                    request,
-                    formsearch=formsearch,
-                    formupdate=formupdate,
-                    productsearch=productsearch,
-                    )
-            
-            return render(request,"updateproduct.html", context)
+        formupdate = ProductForm()                        
+        context = self.get_context_data(
+                            request,
+                            formsearch=formsearch,
+                            formupdate=formupdate,
+                            productsearch=productsearch,
+                            )
+        return render(request,"updateproduct.html", context)
 
     
 def update_product_done(request):
