@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+   |{% extends "base.html" %}
 <title>{% block title %}List-products{% endblock %}</title>
 {% block content %}
 <nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
-  <a href="{% url 'register_product' %}">register products/</a>
-  <a href="{% url 'delete-product' %}">delete/</a>
-  <a href="{% url 'update-product' %}">update/</a>
+  <a href="{% url 'register_product' %}">Registrar productos/</a>
+  <a href="{% url 'delete-product' %}">Eliminar productos/</a>
+  <a href="{% url 'update-product' %}">Actualizar prodcutos/</a>
   <a href="{% url 'stock_products' %}">stock/</a>
   <a href="{% url 'main' %}">home</a>
 </nav>
@@ -16,9 +16,9 @@
   <table class="grid mx-20 my-30 bg-blue-950 rounded-2xl text-gray-200 w-[fit-content] h-[fit-content]">
     <thead>
       <tr class="grid grid-cols-3 justify-items-center  bg-white text-xm text-blue-950">
-        <th>name</th>
-        <th class="w-50">price</th>
-        <th class="w-100">description</th>
+        <th>Nombre</th>
+        <th class="w-50">Precio</th>
+        <th class="w-100">Descripción</th>
       </tr>
     </thead>
     <tbody>

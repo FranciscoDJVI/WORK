@@ -4,11 +4,11 @@
 <table class="bg-blue-950 grid text-gray-200 text-xm">
     <thead>
         <tr class="grid grid-cols-6 grid-rows-1 justify-items-center items-center bg-white text-xm text-blue-950">
-            <th class="w-20">date</th>
-            <th class="w-20">name</th>
-            <th class="w-20">quantity</th>
-            <th class="w-20">price</th>
-            <th class="w-20">pxu</th>
+            <th class="w-20">Fecha</th>
+            <th class="w-20">Nombre</th>
+            <th class="w-20">Cantidad</th>
+            <th class="w-20">Precio</th>
+            <th class="w-20">precioxcantidad</th>
             <th></th>
         </tr>
     </thead>
@@ -27,8 +27,8 @@
     </tbody>
     <tfoot>
         <tr class="grid grid-rows-1 grid-cols-2 justify-items-center items-center bg-white text-blue-950 text-xm">
-            <td class="my-10">Total quantity: {{ quantity }}</td>
-            <td class="my-10">Total price: {{ price_x_quantity|format_currency_cop}}</td>
+            <td class="my-10">Cantidad total: {{ quantity }}</td>
+            <td class="my-10">Precio total: {{ price_x_quantity|format_currency_cop}}</td>
         </tr>
     </tfoot>
 </table>

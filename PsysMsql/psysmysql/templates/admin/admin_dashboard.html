@@ -3,7 +3,7 @@
 <title>{% block title%}main-admin{% endblock %}</title>
  {% block content %}
 <section class="flex">
-  <p class="flex-6 mx-10 my-10 text-2xl text-blue-950">Welcome to PSYS. This is an aplication for inventory management and product sales.</p>
+  <p class="flex-6 mx-10 my-10 text-2xl text-blue-950">Bienvenidos a PSYS. Esta es una aplicación para el manejo de inventario y venta de productos.</p>
   <ul class="flex-1 grid justify-items-center my-10 text-xm text-blue-950 bg-white italic p-2 rounded-2xl">
      {% if user.is_authenticated %}
       {% for group in user.groups.all %}
@@ -13,30 +13,30 @@
     {% endif %}  </ul>
   <form class="flex-1 grid justify-items-center mx-10 my-10 text-xm text-blue-950 bg-white p-2 rounded-2xl" method="post" action="{% url "login" %}">
       {%  csrf_token %}
-      <button type="submit">Logout</button>
+      <button type="submit">Cerrar sesion</button>
   </form>
  </section>
 <div class="flex">
-  <section class="flex-1 h-screen w-100  mx-10 mb-10 grid grid-cols-1 grid-rows-1 justify-items-center items-center p-4 text-gray-400 text-xl rounded-2xl">
-    <section class="bg-white mt-10 absolute top-20 left-10 inline-block p-3 rounded-2xl text-blue-950 italic w-[fit-content] ">
-      <span class="font-extralight mx-10 p-4 rounded-2xl">Register products <a class="rounded-4xl  p-2 text-lg font-extrabold" href={% url 'register_product' %}><i class="fa-solid fa-plus"></i></a></span>
+  <section class="flex-1 h-screen w-100  mx-10 mb-10 grid grid-cols-1 grid-rows-1 justify-items-start items-center p-4 text-gray-400 text-xl rounded-2xl">
+    <section class="w-80 bg-white mt-10 absolute top-20 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10 p-4 rounded-2xl">Ventas <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}><i class="fa-solid fa-cart-plus"></i></a></span>
     </section>
-    <section class="bg-white mt-10 absolute top-40 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
-      <span class="font-extralight mx-10 p-4 rounded-2xl">Sell products <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}><i class="fa-solid fa-cart-plus"></i></a></span>
-    </section>
-    <section class="bg-white mt-10 absolute top-60 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+    <section class="w-80 bg-white mt-10 absolute top-40 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
       <span class="font-extralight mx-10  p-4 rounded-2xl">Stock<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'stock_products' %}><i class="fa-solid fa-boxes-stacked"></i></a></span>
     </section>
-    <section class="bg-white mt-10 absolute top-80 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
-      <span class="font-extralight mx-10  p-4 rounded-2xl">Register user<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'assing_user' %}><i class="fa-solid fa-user-plus"></i></a></span>
+    <section class="w-80 bg-white mt-10 absolute top-60 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10 p-4 rounded-2xl">Registrar producto<a class="rounded-4xl  p-2 text-lg font-extrabold" href={% url 'register_product' %}><i class="fa-solid fa-plus"></i></a></span>
+    </section>
+    <section class="w-80 bg-white mt-10 absolute top-80 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10  p-4 rounded-2xl">Registrar usuario<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'assing_user' %}><i class="fa-solid fa-user-plus"></i></a></span>
     </section>
   </section>
-  <section class="bg-white mt-10 absolute top-100 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
-      <span class="font-extralight mx-10  p-4 rounded-2xl text-lg">Sell register
-        <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'list_all_sell_register'%}><i class="fa-solid fa-eye mx-5"></i></a></span>
+  <section class="w-80 bg-white mt-10 absolute top-100 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10  p-4 rounded-2xl text-lg">Registro de ventas
+        <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'list_all_sell_register'%}><i class="fa-solid fa-eye"></i></a></span>
   </section>
-  <section class="bg-white mt-10 absolute top-120 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
-      <span class="font-extralight mx-10  p-4 rounded-2xl text-lg">Register clients
+  <section class="w-80 bg-white mt-10 absolute top-120 left-10 inline-block p-3 rounded-2xl text-blue-950 italic">
+      <span class="font-extralight mx-10  p-4 rounded-2xl text-lg">Registrar clientes
         <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'register_client'%}><i class="fa-solid fa-address-book"></i></a></span>
   </section>
   </section>

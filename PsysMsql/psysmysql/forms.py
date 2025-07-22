@@ -19,19 +19,19 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Name product",
+                    "placeholder": "Nombre del producto",
                     "class": "bg-white italic border border-gray-400 p-2 text-blue-950",
                 }
             ),
             "price": forms.NumberInput(
                 attrs={
-                    "placeholder": "Enter price",
+                    "placeholder": "Precio del producto",
                     "class": "bg-white italic border  border-gray-400  p-2 text-blue-950",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
-                    "placeholder": "Description...",
+                    "placeholder": "Descripción...",
                     "class": "bg-white italic border border-gray-400  p-2 rounded-2x1 h-50  w-100  text-blue-950",
                 }
             ),
@@ -48,7 +48,7 @@ class DeleteProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Search product ",
+                    "placeholder": "Buscar producto",
                     "class": "bg-white text-blue-950 italic border border-blue-950 p-2",
                 }
             )
@@ -65,7 +65,7 @@ class SearchProduct(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Search product ",
+                    "placeholder": "buscar producto",
                     "class": "bg-white text-blue-950 border border-gray-400 p-2 italic",
                 }
             )
@@ -85,13 +85,13 @@ class SellForm(forms.ModelForm):
         widgets = {
             "totalsell": forms.NumberInput(
                 attrs={
-                    "placeholder": "Quantiity",
+                    "placeholder": "cantidad",
                     "class": "bg-white border border-gray-400 p-2 italic m-5 w-20 text-black",
                 }
             ),
             "id_product": forms.Select(
                 attrs={
-                    "placeholder": "Name",
+                    "placeholder": "Nombre",
                     "class": "bg-white  border border-gray-400 p-2 italic text-black",
                 }
             ),
@@ -115,7 +115,7 @@ class StockForm(forms.ModelForm):
             ),
             "quantitystock": forms.NumberInput(
                 attrs={
-                    "placeholder": "quantity",
+                    "placeholder": "cantidad",
                     "class": "bg-white text-blue-950  border border-gray-400 p-2 italic m-5 text-blue-950",
                 }
             ),
@@ -130,8 +130,7 @@ class SentSellForm(forms.Form):
 class AssginUserToGroupForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=User.objects.all().order_by("username"),
-        label="select user",
-        empty_label="---seleccionar---",
+        label="seleccionar usuario",
         widget=forms.Select(attrs={"class": "border border-gray-400 text-xm p-2 m-4"}),
     )
 
@@ -139,7 +138,7 @@ class AssginUserToGroupForm(forms.Form):
         queryset=Group.objects.all().order_by("name"),
         label="",
         widget=forms.CheckboxSelectMultiple(attrs={"class": "p-2"}),
-    )
+)
 
 
 class RegisterSellDetailForm(forms.ModelForm):
@@ -264,4 +263,3 @@ class SearchEmailForm(forms.Form):
         label="Buscar",max_length=100,
         widget=forms.TextInput(attrs={"class":"bg-white italic text-black font-extrabold rounded-2xl p-1"})
         )
-    

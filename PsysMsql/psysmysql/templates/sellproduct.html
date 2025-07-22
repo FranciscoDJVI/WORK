@@ -3,10 +3,10 @@
 <title>{% block title %}sell-product{% endblock %}</title>
 {% block content %}
 <nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
-  <a href="{% url 'list-product' %}">all productos/</a>
-  <a href="{% url 'register_product' %}">register/</a>
-  <a href="{% url 'delete-product' %}">delete/</a>
-  <a href="{% url 'update-product' %}">update/</a>
+  <a href="{% url 'list-product' %}">Productos/</a>
+  <a href="{% url 'register_product' %}">Registrar productos/</a>
+  <a href="{% url 'delete-product' %}">Eliminar productos/</a>
+  <a href="{% url 'update-product' %}">Actualizar productos/</a>
   <a href="{% url 'stock_products' %}">stock/</a>
   <a href="{% url 'main' %}">home<a />
 </nav>
@@ -26,7 +26,7 @@
       {% csrf_token %}
       {{ formregsitersell }}
       <button id="add" name="add" type="submit"
-        class="bg-green-700  text-xl text-gray-200 rounded-2xl  p-2">add</button>
+        class="bg-green-700  text-xl text-gray-200 rounded-2xl  p-2">agregar</button>
     </form>
     <div class="bg-gray-200 grid grid-cols-1 my-10 text-xl text-black font-extralight p-2 rounded-3xl">
       <form method="post">
@@ -38,7 +38,7 @@
             placeholder="ejemplo@dominio.com" readonly class="italic font-extrabold">
         </div>
         <button id="sent" name="sent" type="submit"
-          class="bg-green-700  text-xl text-gray-200 rounded-2xl mb-10  p-2 absolute right-25 ">sent</button>
+          class="bg-green-700  text-xl text-white rounded-2xl mb-10  p-2 absolute right-28 ">enviar</button>
       </form>
       <div class="section">
         <h2>Búsqueda de Clientes(Correo)</h2>

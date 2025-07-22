@@ -628,7 +628,7 @@ def assign_user_to_group(request):
 
     context = {
         "form": form,
-        "title": "Asignar usuario a groupo",
+        "title": "Asignar usuario a grupo",
         "users_with_groups": users_with_groups,
     }
 

@@ -3,18 +3,18 @@
 {% block content %}
 <section class="h-screen grid grid-rows-3 gap-2 justify-items-center items-center ">
   <nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
-    <a href="{% url 'list-product' %}">All products/</a>
-    <a href="{% url 'register_product' %}">register/</a>
-    <a href="{% url 'update-product' %}">update/</a>
-    <a href="{% url 'stock_products' %}">stock/</a>
-    <a href="{% url 'main' %}">home</a>
+    <a href="{% url 'list-product' %}">Productos/</a>
+    <a href="{% url 'register_product' %}">Registrar productos/</a>
+    <a href="{% url 'update-product' %}">Actualizar productos/</a>
+    <a href="{% url 'stock_products' %}">Stock/</a>
+    <a href="{% url 'main' %}">Home</a>
   </nav>
-  <span class="text-blue-950 text-xl">Delete products</span>
+  <span class="text-blue-950 text-xl">Eliminar productos</span>
   <form
     class="h-80 grid grid-cols-2 grid-rows-1 justify-items-center items-center text-black text-xl  bg-white p-2 rounded-2xl bg-center"
     method="post">
     {% csrf_token %} {{ form }}
-    <button class="bg-blue-950 text-gray-200  p-2 rounded-4xl w-50" type="submit">Delete</button>
+    <button class="bg-blue-950 text-gray-200  p-2 rounded-4xl w-50" type="submit">Eliminar</button>
   </form>
   {% if messages %}
   <div id="messages" class="messages-info">
