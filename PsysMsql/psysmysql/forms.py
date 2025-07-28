@@ -86,13 +86,13 @@ class SellForm(forms.ModelForm):
             "totalsell": forms.NumberInput(
                 attrs={
                     "placeholder": "cantidad",
-                    "class": "bg-white border border-gray-400 p-2 italic m-5 w-20 text-black",
+                    "class": "bg-gray-400  p-2 m-5 w-20 text-cyan-950",
                 }
             ),
             "id_product": forms.Select(
                 attrs={
                     "placeholder": "Nombre",
-                    "class": "bg-white  border border-gray-400 p-2 italic text-black",
+                    "class": "bg-gray-400 p-2 italic text-cyan-950",
                 }
             ),
         }
@@ -148,16 +148,14 @@ class RegisterSellDetailForm(forms.ModelForm):
             "efectivo",
         ),
         ("trasnferencia", "trasnferencia"),
-        ("tarjeta_credito", "tarjeta crédito"),
-        ("tarjeta_debito", "tarjeta débito"),
+        ("tarjeta credito", "tarjeta crédito"),
+        ("tarjeta debito", "tarjeta débito"),
     ]
     type_pay = forms.ChoiceField(
         choices=OPTIONS_TYPE_PAY,
         label="",
         initial="efectivo",
-        widget=forms.Select(
-            attrs={"class": "bg-white border border-gray-400 p-2 italic text-black"}
-        ),
+        widget=forms.Select(attrs={"class": "bg-gray-400 p-2 text-cyan-950"}),
     )
     OPTIONS_STATE_SELL = [
         (
@@ -170,9 +168,7 @@ class RegisterSellDetailForm(forms.ModelForm):
         choices=OPTIONS_STATE_SELL,
         label="",
         initial="pagado",
-        widget=forms.Select(
-            attrs={"class": "bg-white border border-gray-400 p-2 italic text-black"}
-        ),
+        widget=forms.Select(attrs={"class": "bg-gray-400 p-2  text-cyan-950"}),
     )
 
     class Meta:
@@ -185,7 +181,7 @@ class RegisterSellDetailForm(forms.ModelForm):
             "notes": forms.TextInput(
                 attrs={
                     "placeholder": "coment.",
-                    "class": "bg-white border border-gray-400 p-2 italic text-black",
+                    "class": "bg-gray-400 p-2 italic text-cyan-950",
                 }
             ),
         }

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
-from django.views import View 
+from django.views import View
 from django.utils.decorators import method_decorator
 from .tasks import send_sell_confirmation_email
 
@@ -30,11 +30,13 @@ from .forms import AssginUserToGroupForm
 from .forms import RegisterSellDetailForm
 from .forms import ClientsForm
 
+
 def is_admin(user):
     if user.is_authenticated:
         if user.groups.filter(name="Administrador").exists():
             return True
     return False
+
 
 def is_seller(user):
     if user.is_authenticated:
@@ -42,8 +44,10 @@ def is_seller(user):
             return True
     return False
 
+
 def app(request):
     return render(request, "app.html")
+
 
 @login_required
 def dashboard(request):
@@ -90,9 +94,7 @@ def view_product(request):
     return render(
         request,
         "allproducts.html",
-        {"allproducts": all_products, 
-         "total_products_save": total_products
-        },
+        {"allproducts": all_products, "total_products_save": total_products},
     )
 
 
@@ -132,30 +134,34 @@ def delete_product_done(request):
     return render(request, "deleteproductdone.html")
 
 
-
-@method_decorator([
-    login_required(login_url="login"),
-    permission_required("psysmysql.change_product", login_url="login")
-], name='dispatch')
+@method_decorator(
+    [
+        login_required(login_url="login"),
+        permission_required("psysmysql.change_product", login_url="login"),
+    ],
+    name="dispatch",
+)
 class Update(View):
     template_name = "updateproduct.html"
-    
-    def get_context_data(self, request, formsearch=None, formupdate=None, productsearch=None):
-            if formsearch is None:
-                formsearch = SearchProduct()
-            if formupdate  is None:
-                formupdate = ProductForm()
-            
-            return  {
-                "form": formsearch,
-                "formupdate": formupdate,
-                "productsearch": productsearch,
-            }
+
+    def get_context_data(
+        self, request, formsearch=None, formupdate=None, productsearch=None
+    ):
+        if formsearch is None:
+            formsearch = SearchProduct()
+        if formupdate is None:
+            formupdate = ProductForm()
+
+        return {
+            "form": formsearch,
+            "formupdate": formupdate,
+            "productsearch": productsearch,
+        }
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(request)
         return render(request, self.template_name, context)
-    
+
     def post(self, request, *args, **kwargs):
         if "search" in request.POST:
             return self._handle_search_product(request)
@@ -168,109 +174,109 @@ class Update(View):
             )
             context = self.get_context_data(request)
             return render(request, self.template_name, context)
-    
+
     def _handle_search_product(self, request):
-            formsearch = SearchProduct(request.POST)
-            formupdate = ProductForm()
-            
-            
-            if formsearch.is_valid():
-                namesearch = formsearch.cleaned_data["name"]
-                productfound = Products.objects.get(name=namesearch)
-            
-                if productfound:
-                    productsearch = productfound # Obtén el objeto real
-                    request.session["original_name"] = namesearch
-                
+        formsearch = SearchProduct(request.POST)
+        formupdate = ProductForm()
+
+        if formsearch.is_valid():
+            namesearch = formsearch.cleaned_data["name"]
+            productfound = Products.objects.get(name=namesearch)
+
+            if productfound:
+                productsearch = productfound  # Obtén el objeto real
+                request.session["original_name"] = namesearch
+
                 # ¡LA CLAVE ESTÁ AQUÍ! Inicializa formupdate con la instancia del producto encontrado
-                    formupdate = ProductForm(instance=productsearch)
-                    print(productfound)
-                else:
-                    messages.error(
-                        request, "No se encontraron productos con ese nombre."
-                    )
-                    productsearch = None
+                formupdate = ProductForm(instance=productsearch)
+                print(productfound)
             else:
-                messages.error(
-                    request,
-                    "Por favor, corrige los errores en el formulario de búsqueda.",
-                )
-            context = self.get_context_data(
-                    request,
-                    formsearch=formsearch,
-                    formupdate=formupdate,
-                    productsearch=productsearch,
-                    )
-            
-            return render(request,"updateproduct.html", context)
-    
+                messages.error(request, "No se encontraron productos con ese nombre.")
+                productsearch = None
+        else:
+            messages.error(
+                request,
+                "Por favor, corrige los errores en el formulario de búsqueda.",
+            )
+        context = self.get_context_data(
+            request,
+            formsearch=formsearch,
+            formupdate=formupdate,
+            productsearch=productsearch,
+        )
+
+        return render(request, "updateproduct.html", context)
+
     def _handle_update_product(self, request):
         original_name = request.session.get("original_name")
         productsearch = None
-        
+
         if not original_name:
             messages.error(request, "No hay producto con ese nombre")
             context = self.get_context_data(request)
             return render(request, self.template_name, context)
-        
+
         formupdate = ProductForm(request.POST)
         formsearch = SearchProduct()
-            
+
         if formupdate.is_valid():
-                    new_name = formupdate.cleaned_data["name"]
-                    new_price = formupdate.cleaned_data["price"]
-                    new_description = formupdate.cleaned_data["description"]
+            new_name = formupdate.cleaned_data["name"]
+            new_price = formupdate.cleaned_data["price"]
+            new_description = formupdate.cleaned_data["description"]
 
-                    original_name = request.session.get("original_name")
-                    try:
-                        productupdate = Products.objects.get(name=original_name)
-                        
-                        if productupdate:
-                            productupdate.name = new_name
-                            productupdate.price = new_price
-                            productupdate.description = new_description
-                            productupdate.save()
-                            messages.info(request, "Actualización exitosa")
+            original_name = request.session.get("original_name")
+            try:
+                productupdate = Products.objects.get(name=original_name)
 
-                            request.session["original_name"] = None
-                            productsearch = None
-                        else:
-                            messages.error(
-                                request,
-                                "Fallo en la Actualización: Producto no encontrado.",
-                            )
+                if productupdate:
+                    productupdate.name = new_name
+                    productupdate.price = new_price
+                    productupdate.description = new_description
+                    productupdate.save()
+                    messages.info(request, "Actualización exitosa")
 
-                    except Exception as e:
-                        messages.error(request, f"Error durante la actualización: {e}")
+                    request.session["original_name"] = None
+                    productsearch = None
+                else:
+                    messages.error(
+                        request,
+                        "Fallo en la Actualización: Producto no encontrado.",
+                    )
+
+            except Exception as e:
+                messages.error(request, f"Error durante la actualización: {e}")
         else:
-                messages.error(
-                    request,
-                    "Por favor, corrige los errores en el formulario de actualización.",
-                )
-                if original_name:
-                    try:
-                        productsearch = Products.objects.get(name=original_name)
-                    except Products.DoesNotExist:
-                        productsearch = None
-        formupdate = ProductForm()                        
+            messages.error(
+                request,
+                "Por favor, corrige los errores en el formulario de actualización.",
+            )
+            if original_name:
+                try:
+                    productsearch = Products.objects.get(name=original_name)
+                except Products.DoesNotExist:
+                    productsearch = None
+        formupdate = ProductForm()
         context = self.get_context_data(
-                            request,
-                            formsearch=formsearch,
-                            formupdate=formupdate,
-                            productsearch=productsearch,
-                            )
-        return render(request,"updateproduct.html", context)
+            request,
+            formsearch=formsearch,
+            formupdate=formupdate,
+            productsearch=productsearch,
+        )
+        return render(request, "updateproduct.html", context)
 
-    
+
 def update_product_done(request):
     return render(request, "updateproductdone.html")
 
 
 # Ventas
-@method_decorator([
-    login_required(login_url="login"), 
-    permission_required("psysmysql.add_sell", login_url="login") 
-], name='dispatch')
+@method_decorator(
+    [
+        login_required(login_url="login"),
+        permission_required("psysmysql.add_sell", login_url="login"),
+    ],
+    name="dispatch",
+)
 class SellProductView(View):
     template_name = "sellproduct.html"
 
@@ -301,20 +307,20 @@ class SellProductView(View):
                 }
             )
 
-        quantity_dict = sum(item['quantity'] for item in list_items)
-        price_dict = sum(item['price'] for item in list_items)
-        price_x_quantity = sum(item['pricexquantity'] for item in list_items)
+        quantity_dict = sum(item["quantity"] for item in list_items)
+        price_dict = sum(item["price"] for item in list_items)
+        price_x_quantity = sum(item["pricexquantity"] for item in list_items)
 
-    
         formsearch = SearchEmailForm(request.GET or None)
         search_results = []
-        search_query = None 
+        search_query = None
 
         if formsearch.is_valid():
             search_query = formsearch.cleaned_data["query"]
-            if search_query: 
-                search_results = Clients.objects.filter(Q(email__icontains=search_query)).distinct()
-        
+            if search_query:
+                search_results = Clients.objects.filter(
+                    Q(email__icontains=search_query)
+                ).distinct()
 
         context = {
             "formsell": formsell,
@@ -325,10 +331,9 @@ class SellProductView(View):
             "quantity": quantity_dict,
             "price": price_dict,
             "price_x_quantity": price_x_quantity,
-        
             "formsearch": formsearch,
-            "search_query": search_query, 
-            "search_results": search_results, 
+            "search_query": search_query,
+            "search_results": search_results,
         }
         return context
 
@@ -338,7 +343,6 @@ class SellProductView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-
         if "sell" in request.POST:
             return self._handle_sell_form(request)
         elif "sent" in request.POST:
@@ -395,11 +399,12 @@ class SellProductView(View):
             request.session["data_json_sell"] = data
 
             all_data = request.session.get("data_json_sell", [])
-            client_email_to_send = request.POST.get('client_email_selected') # Obtén el correo del campo oculto
-      
+            client_email_to_send = request.POST.get(
+                "client_email_selected"
+            )  # Obtén el correo del campo oculto
+
             email_subject = "Confirmación de Venta - Su Compra"
             email_message = str(all_data)
-
 
             for item in all_data:
                 product_id = item["id_product"]
@@ -426,22 +431,35 @@ class SellProductView(View):
                         product_stock.save()
 
                 except Stock.DoesNotExist:
-                    messages.error(request, f"Producto ID {product_id} no encontrado en stock.")
+                    messages.error(
+                        request, f"Producto ID {product_id} no encontrado en stock."
+                    )
                 except DatabaseError as e:
                     messages.error(
                         request,
                         f"Error en la base de datos al actualizar stock para el producto ID {product_id}: {e}",
                     )
                 except Exception as e:
-                    messages.error(request, f"Ocurrió un error inesperado para el producto ID {product_id}: {e}")
+                    messages.error(
+                        request,
+                        f"Ocurrió un error inesperado para el producto ID {product_id}: {e}",
+                    )
 
             SellProducts.objects.all().delete()
             messages.success(request, "Proceso de envío de ventas completado.")
             if client_email_to_send:
-                send_sell_confirmation_email.delay(client_email_to_send, email_subject, email_message)
-                messages.info(request, f"Se inició el envío de correo de confirmación a {client_email_to_send}.")
+                send_sell_confirmation_email.delay(
+                    client_email_to_send, email_subject, email_message
+                )
+                messages.info(
+                    request,
+                    f"Se inició el envío de correo de confirmación a {client_email_to_send}.",
+                )
             else:
-                messages.warning(request, "No se proporcionó un correo de cliente para enviar la confirmación.")
+                messages.warning(
+                    request,
+                    "No se proporcionó un correo de cliente para enviar la confirmación.",
+                )
 
             return redirect("sell_product")
         else:
@@ -480,7 +498,9 @@ class SellProductView(View):
                     }
                 )
 
-            id_employed = request.user.username if request.user.is_authenticated else "anonymous"
+            id_employed = (
+                request.user.username if request.user.is_authenticated else "anonymous"
+            )
 
             register_sell = RegistersellDetail(
                 id_employed=id_employed,
@@ -493,9 +513,15 @@ class SellProductView(View):
             try:
                 register_sell.save()
             except DatabaseError as e:
-                messages.error(request, f"Error en la base de datos al registrar el detalle de venta: {e}")
+                messages.error(
+                    request,
+                    f"Error en la base de datos al registrar el detalle de venta: {e}",
+                )
             except Exception as e:
-                messages.error(request, f"Ocurrió un error inesperado al registrar el detalle de venta: {e}")
+                messages.error(
+                    request,
+                    f"Ocurrió un error inesperado al registrar el detalle de venta: {e}",
+                )
 
             return redirect("sell_product")
         else:
@@ -507,11 +533,11 @@ class SellProductView(View):
                     )
             return redirect("sell_product")
 
-        
 
 def listallsellregisterview(request):
     listallregister = RegistersellDetail.objects.all()
     return render(request, "listallsellregister.html", {"list": listallregister})
+
 
 # función para mostrar los datos de los registros de ventas.
 def detailregisterview(request, pk):
@@ -519,7 +545,9 @@ def detailregisterview(request, pk):
 
     detail_products_list = []
     # Verificamos que register_sell_instance no este vacio y que tambien sea una instancia o un objecto de python.
-    if register_sell_instance.detail_sell and isinstance(register_sell_instance.detail_sell, str):
+    if register_sell_instance.detail_sell and isinstance(
+        register_sell_instance.detail_sell, str
+    ):
         try:
             # Decodificación de los datos de tipo Json.
             detail_products_list = json.loads(register_sell_instance.detail_sell)
@@ -527,8 +555,8 @@ def detailregisterview(request, pk):
             print(f"Error: detail_sell para idsell={pk} no es JSON válido.")
 
     context = {
-        'register_sell_instance': register_sell_instance,
-        'detail': detail_products_list,
+        "register_sell_instance": register_sell_instance,
+        "detail": detail_products_list,
     }
     print(detail_products_list)
     return render(request, "listdetailsellregister.html", context)
@@ -550,7 +578,6 @@ def list_product_sell(request):
     list_sell_products = SellProducts.objects.all()
     context = {"list_sell_products": list_sell_products}
     return render(request, "listsellproducts.html", context)
-
 
 
 @login_required
@@ -598,7 +625,6 @@ def list_stock(request):
     return render(request, "liststock.html", {"list_stock": list_stock})
 
 
-
 def page_404(request):
     wait_time = 5
     return render(request, "404.html", {"wait_time": wait_time})
@@ -641,24 +667,24 @@ def register_clients(request):
         if formclients.is_valid():
             name = formclients.cleaned_data["name"]
             email = formclients.cleaned_data["email"]
-            direction= formclients.cleaned_data["direction"]
+            direction = formclients.cleaned_data["direction"]
             telephone = formclients.cleaned_data["telephone"]
             nit = formclients.cleaned_data["nit"]
             country = formclients.cleaned_data["country"]
             departament = formclients.cleaned_data["departament"]
             city = formclients.cleaned_data["city"]
-            
+
             new_client = Clients(
-                name = name,
-                email = email,
-                direction = direction,
-                nit = nit,
-                telephone = telephone,
-                country = country,
-                departament = departament,
-                city = city
+                name=name,
+                email=email,
+                direction=direction,
+                nit=nit,
+                telephone=telephone,
+                country=country,
+                departament=departament,
+                city=city,
             )
-            
+
             new_client.save()
 
             return redirect("register_client")
@@ -666,6 +692,4 @@ def register_clients(request):
             return redirect("register_client")
     else:
         formclients = ClientsForm()
-        return render(request,"registerclients.html", {"formclients": formclients})
-    
-    
+        return render(request, "registerclients.html", {"formclients": formclients})

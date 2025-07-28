@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 {% load currency_filters %}
 {% block content %}
-<table class="bg-blue-950 grid text-gray-200 text-xm">
+<table class="bg-cyan-950 grid text-gray-200 text-xm">
     <thead>
-        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center items-center bg-white text-xm text-blue-950">
+        <tr class="grid grid-cols-5 grid-rows-1 justify-items-center items-center bg-cyan-950 text-xm text-gray-400">
             <th class="w-20">Fecha</th>
             <th class="w-20">Nombre</th>
             <th class="w-20">Cantidad</th>
             <th class="w-20">Precio</th>
-            <th class="w-20">precioxcantidad</th>
+            <th class="w-20">precio/cant.</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         {% for item2 in list_sell_products %}
-        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center p-2 italic ">
+        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center bg-cyan-950 text-gray-400 border border-gray-400  p-2 my-1">
             <td class="w-50">{{ item2.idsell.datesell }}</td>
             <td>{{ item2.idproduct.name }}</td>
             <td>{{ item2.quantity }}</td>
             <td>{{ item2.priceunitaty|format_currency_cop }}</td>
             <td>{{ item2.quantity|mult:item2.priceunitaty|format_currency_cop }}</td>
-            <td><a href="{% url 'delete_sell_item' item2.idsell_product %}" class="text-red-500 hover:text-red-700">
+            <td><a href="{% url 'delete_sell_item' item2.idsell_product %}" class="text-gray-400 hover:text-cyan-800">
                     <i class="fa-solid fa-trash-can mx-10"></i></a>
         </tr>
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr class="grid grid-rows-1 grid-cols-2 justify-items-center items-center bg-white text-blue-950 text-xm">
+        <tr class="grid grid-rows-1 grid-cols-2 justify-items-center items-center bg-cyan-950 text-gray-400 text-xl font-extrabold">
             <td class="my-10">Cantidad total: {{ quantity }}</td>
             <td class="my-10">Precio total: {{ price_x_quantity|format_currency_cop}}</td>
         </tr>
