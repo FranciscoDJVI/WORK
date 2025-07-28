@@ -11,21 +11,21 @@
   <a href="{% url 'main' %}">home<a />
 </nav>
 <section class="mx-20 my-40 grid justify-items-center items-center">
-  <form class="bg-cyan-950 my-5  grid grid-cols-3 grid-rows-1 justify-items-center items-center p-5" method="post">
+  <form class="bg-cyan-950 my-3 grid grid-cols-3 grid-rows-1 justify-items-center items-center p-2" method="post">
     {% csrf_token %}
     {{ formsell }}
     <button id="sell" name="sell" type="submit"
-      class="bg-gray-300 text-3xl text-cyan-950 w-20 rounded-3xl  p-2">+</button>
+      class="bg-gray-400 text-xl text-cyan-950 w-15 rounded-3xl  p-2"><i class="fa-solid fa-plus"></i></button>
   </form>
   <aside class="h-[fit-contect] w-[fit-content] bg-cyan-950 p-2 mb-10 rounded-3xl">
     {% include "listsellproducts.html" %}
   </aside>
-  <section class="bg-cyan-950 grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center border border-gray-300 P-2 rounded-3xl"> 
+  <section class="bg-cyan-950 grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center border border-gray-400 P-2 rounded-3xl"> 
     <form method="post" class="bg-cyan-950 my-20  grid grid-cols-4 grid-rows-1 justify-items-center items-center rounded-2xl">
     {% csrf_token %} {{ formregsitersell }}
-    <button id="add" name="add" type="submit" class="bg-gray-300  text-xl text-cyan-950 rounded-2xl  p-2">agregar</button>
+    <button id="add" name="add" type="submit" class="bg-gray-400  text-xl text-cyan-950 rounded-2xl  p-2">agregar</button>
     </form>
-    <div class="bg-cyan-950 grid grid-cols-1 my-10 text-xl text-gray-300 font-extralight p-2 rounded-3xl">
+    <div class="bg-cyan-950 grid grid-cols-1 my-5 text-xl text-gray-300 font-extralight p-1 rounded-3xl">
       <form method="post">
         {% csrf_token %}
         {{ sentform }}
@@ -46,9 +46,8 @@
             {% if formsearch.query.help_text %}<small>{{ formsearch.query.help_text }}</small>{% endif %}
             {% for error in formsearch.query.errors %}<span style="color: red;">{{ error }}</span>{% endfor %}
           </div>
-          <button type="submit" class="bg-gray-300 text-cyan-950 font-extrabold p-2 rounded-2xl my-5" >Buscar</button>
+          <button type="submit" class="bg-gray-400 text-cyan-950 font-extrabold p-2 rounded-2xl my-5" >Buscar</button>
         </form>
-
         <div class="search-results">
           {% if search_query %}
           <h3>Resultados para "{{ search_query }}"</h3>

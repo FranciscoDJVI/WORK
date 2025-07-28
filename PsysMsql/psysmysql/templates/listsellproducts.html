@@ -3,7 +3,7 @@
 {% block content %}
 <table class="bg-cyan-950 grid text-gray-200 text-xm">
     <thead>
-        <tr class="grid grid-cols-5 grid-rows-1 justify-items-center items-center bg-cyan-950 text-xm text-gray-400">
+        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center items-center bg-cyan-950 text-xm text-gray-400">
             <th class="w-20">Fecha</th>
             <th class="w-20">Nombre</th>
             <th class="w-20">Cantidad</th>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         {% for item2 in list_sell_products %}
-        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center bg-cyan-950 text-gray-400 border border-gray-400  p-2 my-1">
+        <tr class="grid grid-cols-6 grid-rows-1 justify-items-center bg-gray-400 text-cyan-950 border border-gray-400  p-2 my-1">
             <td class="w-50">{{ item2.idsell.datesell }}</td>
             <td>{{ item2.idproduct.name }}</td>
             <td>{{ item2.quantity }}</td>

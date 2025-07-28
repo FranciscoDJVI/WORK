@@ -86,13 +86,13 @@ class SellForm(forms.ModelForm):
             "totalsell": forms.NumberInput(
                 attrs={
                     "placeholder": "cantidad",
-                    "class": "bg-gray-400  p-2 m-5 w-20 text-cyan-950",
+                    "class": "bg-gray-400  p-2 m-5 w-40 text-cyan-950 rounded-2xl font-extrabold",
                 }
             ),
             "id_product": forms.Select(
                 attrs={
                     "placeholder": "Nombre",
-                    "class": "bg-gray-400 p-2 italic text-cyan-950",
+                    "class": "bg-gray-400 p-2 italic text-cyan-950 rounded-2xl font-extrabold",
                 }
             ),
         }
@@ -144,8 +144,8 @@ class AssginUserToGroupForm(forms.Form):
 class RegisterSellDetailForm(forms.ModelForm):
     OPTIONS_TYPE_PAY = [
         (
-            "efectivo",
-            "efectivo",
+            "Efectivo",
+            "Efectivo",
         ),
         ("trasnferencia", "trasnferencia"),
         ("tarjeta credito", "tarjeta crédito"),
@@ -154,21 +154,25 @@ class RegisterSellDetailForm(forms.ModelForm):
     type_pay = forms.ChoiceField(
         choices=OPTIONS_TYPE_PAY,
         label="",
-        initial="efectivo",
-        widget=forms.Select(attrs={"class": "bg-gray-400 p-2 text-cyan-950"}),
+        initial="Efectivo",
+        widget=forms.Select(
+            attrs={"class": "bg-gray-400 p-2 text-cyan-950 rounded-2xl font-extrabold"}
+        ),
     )
     OPTIONS_STATE_SELL = [
         (
-            "pagado",
-            "pagado",
+            "Pagado",
+            "Pagado",
         ),
         ("en espera", "en espera"),
     ]
     state_sell = forms.ChoiceField(
         choices=OPTIONS_STATE_SELL,
         label="",
-        initial="pagado",
-        widget=forms.Select(attrs={"class": "bg-gray-400 p-2  text-cyan-950"}),
+        initial="Pagado",
+        widget=forms.Select(
+            attrs={"class": "bg-gray-400 p-2  text-cyan-950 rounded-2xl font-extrabold"}
+        ),
     )
 
     class Meta:
@@ -181,7 +185,7 @@ class RegisterSellDetailForm(forms.ModelForm):
             "notes": forms.TextInput(
                 attrs={
                     "placeholder": "coment.",
-                    "class": "bg-gray-400 p-2 italic text-cyan-950",
+                    "class": "bg-gray-400 p-2 italic text-cyan-950 rounded-2xl font-extrabold",
                 }
             ),
         }
@@ -257,6 +261,6 @@ class SearchEmailForm(forms.Form):
         label="Buscar",
         max_length=100,
         widget=forms.TextInput(
-            attrs={"class": "bg-white italic text-black font-extrabold rounded-2xl p-1"}
+            attrs={"class": "bg-gray-400 text-cyan-950 font-extrabold rounded-2xl p-1"}
         ),
     )
