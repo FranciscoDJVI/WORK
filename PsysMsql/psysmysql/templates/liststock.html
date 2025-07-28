@@ -1,16 +1,16 @@
 {% extends "base.html"%}
 <title>{% block title %}{% endblock%}</title>
 {% block content %}
-<table class="bg-blue-950 mx-5 rounded-2xl text-gray-200 w-[fit-content] h-[fit-content]">
+<table class="bg-gray-300 mx-5 rounded-2xl text-cyan-950 w-[fit-content] h-[fit-content]">
     <thead>
-        <tr class="grid grid-cols-2 justify-items-center items-center bg-white text-xl text-blue-950">
+        <tr class="grid grid-cols-2 justify-items-center items-center bg-cyan-950 text-xl text-gray-300">
             <th>Nombre</th>
             <th>Cantidad</th>
         </tr>
     </thead>
     <tbody>
         {% for product in list_stock %}
-        <tr class="grid grid-cols-2 justify-items-center p-2 italic text-xl">
+        <tr class="grid grid-cols-2 justify-items-center p-2 italic text-xl font-extrabold">
             <td>{{ product.id_products.name }}</td>
             <td>{{ product.quantitystock }}</td>
         </tr>

@@ -1,24 +1,25 @@
 {% extends "base.html" %}
+{% block title %}Detail-sell{% endblock %}
 {% load currency_filters %}
 {% block content %}
-<h2 class="mx-5 my-10 text-blue-950 text-xm bg-white w-[fit-content] p-2 rounded-3xl">
+<h2 class="mx-5 my-10 text-gray-300 text-xm bg-cyan-950 w-[fit-content] p-2">
   Registro de venta número: {{ register_sell_instance.idsell}}
 </h2>
-<hr>
-<table class="bg-blue-950 grid text-gray-200 text-xm mx-10 my-10">
+<hr class="text-gray-400">
+<table class="bg-gray-300 grid text-cyan-950 text-xm mx-10 my-10">
   <thead>
-    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center items-center bg-white text-xm text-blue-950">
+    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center items-center bg-cyan-950 text-xm text-gray-400">
       <th class="w-20">ID</th>
-      <th class="w-20">Nombre</th>
+      <th class="w-20">Producto</th>
       <th class="w-20">Cantidad</th>
       <th class="w-20">Precio</th>
-      <th class="w-20">PrecioxCantidad</th>
+      <th class="w-20">Precio/cant</th>
       <th></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="bg-cyan-950 text-gray-300">
     {% for item in detail %}
-    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center p-2 italic ">
+    <tr class="grid grid-cols-5 grid-rows-1 justify-items-center p-2 border border-gray-400 my-1 bg-gray-400 text-cyan-950 font-extrabold">
       <td>{{ item.id_product }}</td>
       <td>{{ item.name }}</td>
       <td>{{ item.quantity }}</td>
@@ -28,5 +29,5 @@
     {% endfor %}
   </tbody>
 </table>
-<a href="{% url 'list_all_sell_register' %}" class="text-blue-950 absolute top-10 right-40 mb-10">Volver</a>
+<a href="{% url 'list_all_sell_register' %}" class="text-gray-300 absolute top-10 right-40 mb-10">Volver</a>
 {% endblock %}

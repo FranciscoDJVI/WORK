@@ -20,19 +20,19 @@ class ProductForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={
                     "placeholder": "Nombre del producto",
-                    "class": "bg-white italic border border-gray-400 p-2 text-blue-950",
+                    "class": "bg-gray-300 italic border border-gray-400 p-2 text-cyan-950",
                 }
             ),
             "price": forms.NumberInput(
                 attrs={
                     "placeholder": "Precio del producto",
-                    "class": "bg-white italic border  border-gray-400  p-2 text-blue-950",
+                    "class": "bg-gray-300 italic border  border-gray-400  p-2 text-cyan-950",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "placeholder": "Descripción...",
-                    "class": "bg-white italic border border-gray-400  p-2 rounded-2x1 h-50  w-100  text-blue-950",
+                    "class": "bg-gray-300 italic border border-gray-400  p-2 rounded-2x1 h-50  w-100  text-cyan-950",
                 }
             ),
         }
@@ -138,7 +138,7 @@ class AssginUserToGroupForm(forms.Form):
         queryset=Group.objects.all().order_by("name"),
         label="",
         widget=forms.CheckboxSelectMultiple(attrs={"class": "p-2"}),
-)
+    )
 
 
 class RegisterSellDetailForm(forms.ModelForm):
@@ -190,76 +190,77 @@ class RegisterSellDetailForm(forms.ModelForm):
             ),
         }
 
+
 class ClientsForm(forms.ModelForm):
-    
     class Meta:
         model = models.Clients
         fields = "__all__"
         labels = {
-            "name":"",
-            "email":"",
-            "direction":"",
-            "telephone":"",
-            "nit":"",
-            "country":"",
-            "departament":"",
-            "city":"",
-            
+            "name": "",
+            "email": "",
+            "direction": "",
+            "telephone": "",
+            "nit": "",
+            "country": "",
+            "departament": "",
+            "city": "",
         }
         widgets = {
             "name": forms.TextInput(
-                attrs = {
-                    "placeholder":"name/enterprise",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "Nombre/Razón social",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "email": forms.EmailInput(
-                attrs = {
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5"
                 }
             ),
             "direction": forms.TextInput(
-                attrs = {
-                    "placeholder":"direction",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "Dirección",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "telephone": forms.TextInput(
-                attrs = {
-                    "placeholder":"telephone",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "Telefono",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "nit": forms.TextInput(
-                attrs = {
-                    "placeholder":"nit",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "nit",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "country": forms.TextInput(
-                attrs = {
-                    "placeholder":"country",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "País",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "departament": forms.TextInput(
-                attrs = {
-                    "placeholder":"departament",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "Departamento",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
             "city": forms.TextInput(
-                attrs = {
-                    "placeholder":"city",
-                    "class":"border border-blue-950 p-2 m-5"
+                attrs={
+                    "placeholder": "Ciudad",
+                    "class": "border bg-gray-400 border-cyan-950  text-cyan-950 p-2 m-5",
                 }
             ),
-            
         }
-        
+
 
 class SearchEmailForm(forms.Form):
     query = forms.CharField(
-        label="Buscar",max_length=100,
-        widget=forms.TextInput(attrs={"class":"bg-white italic text-black font-extrabold rounded-2xl p-1"})
-        )
+        label="Buscar",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={"class": "bg-white italic text-black font-extrabold rounded-2xl p-1"}
+        ),
+    )

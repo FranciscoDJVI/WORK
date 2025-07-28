@@ -2,7 +2,7 @@
 <title>{% block title %}Products{% endblock %}</title>
 {% block content %}
 <section class="h-screen grid grid-cols-1 grid-rows-3 justify-items-center items-center">
-  <nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+  <nav class="mx-10 my-10 text-gray-300 p-3 absolute top-0 right-30 text-xl">
     <a href="{% url 'list-product' %}">Productos/</a>
     <a href="{% url 'sell_product' %}">Ventas/</a>
     <a href="{% url 'delete-product' %}">Eliminar productos/</a>
@@ -10,12 +10,12 @@
     <a href="{% url 'stock_products' %}">Stock/</a>
     <a href="{% url 'main' %}">Home</a>
   </nav>
-  <span class="text-blue-950 text-xl">Registrar productos</span>
+  <span class="text-gray-300 text-xl">Registrar productos</span>
   <form method="post"
-    class=" bg-white grid justify-items-center gap-2 p-4 h-[fit-content] w-[fit-content] rounded-2xl text-xm text-white">
+    class=" bg-cyan-950 grid justify-items-center gap-2 p-10 h-[fit-content] w-[fit-content] rounded-2xl text-xm text-white border border-gray-300">
     {% csrf_token %}
     {{ formregister }}
-    <button class="bg-blue-950 hover:bg-white hover:text-blue-950 rounded-2xl  p-2" type="submit"
+    <button class="bg-gray-300 text-cyan-950 rounded-2xl  p-2" type="submit"
       id="registrarBtn">Registrar</button>
   </form>
   {% if messages %}

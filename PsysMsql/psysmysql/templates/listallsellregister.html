@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% block title %}List-register-sell{% endblock%}
 {% load currency_filters %}
 {% block content %}
-<nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+<nav class="mx-10 my-10 text-gray-300 p-3 absolute top-0 right-30 text-xl">
   <a href="{% url 'list-product' %}">Productos/</a>
   <a href="{% url 'sell_product' %}">Vender productos/</a>
   <a href="{% url 'delete-product' %}">Eliminar productos/</a>
@@ -9,28 +10,31 @@
   <a href="{% url 'stock_products' %}">Stock/</a>
   <a href="{% url 'main' %}">Home</a>
 </nav>
-<table class="bg-blue-950 mx-40 my-30 rounded-2xl  text-gray-200 text-xm" <thead>
-  <tr class="grid grid-cols-6 justify-items-center bg-white text-xm text-blue-950">
+<div class="grid juistify-items-center items-center">
+  <table class="bg-cyan-950 mx-40 my-30 rounded-2xl  text-gray-300 text-xm  justify-items-center">
+  <thead>
+  <tr class="grid grid-cols-6 justify-items-center items-center bg-cyan-950 text-xm text-gray-400 mx-5">
     <th class="w-20">Fecha</th>
     <th class="w-20">Empleado</th>
     <th class="w-20">Total</th>
-    <th class="w-20">Tipo de Pago</th>
-    <th class="w-20">Estado de Venta</th>
-    </t>
+    <th class="w-20">Tipo/pago</th>
+    <th class="w-20">Estado/Venta</th>
+    <th class="w-20">Detalles</th>
     </thead>
     <tbody>
       {% for item2 in list %}
-      <tr class="grid grid-cols-6 grid-rows-1 justify-items-center mx-5 italic ">
+      <tr class="grid grid-cols-6 grid-rows-1 justify-items-center mx-5 border border-gray-400 p-2 my-1 bg-gray-400 text-cyan-950 font-extrabold">
         <td class="w-50">{{ item2.date }}</td>
         <td>{{ item2.id_employed }}</td>
         <td>{{ item2.total_sell|format_currency_cop }}</td>
         <td>{{ item2.type_pay}}</td>
         <td>{{ item2.state_sell}}</td>
-        <td><a href="{% url 'list_detail_sell_register' item2.idsell %}" class="text-gray-200 hover:text-gray-950">
+        <td><a href="{% url 'list_detail_sell_register' item2.idsell %}" class="text-cyan-950 hover:text-cyan-800">
             <i class="fa-solid fa-eye mx-5"></i></a>
         </td>
       </tr>
       {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

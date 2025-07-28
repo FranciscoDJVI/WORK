@@ -2,7 +2,7 @@
 <!doctype html>
 <title>{% block title %}sell-product{% endblock %}</title>
 {% block content %}
-<nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+<nav class="mx-10 my-10 text-gray-300 p-3 absolute top-0 right-30 text-xl">
   <a href="{% url 'list-product' %}">Productos/</a>
   <a href="{% url 'register_product' %}">Registrar productos/</a>
   <a href="{% url 'delete-product' %}">Eliminar productos/</a>
@@ -11,24 +11,21 @@
   <a href="{% url 'main' %}">home<a />
 </nav>
 <section class="mx-20 my-40 grid justify-items-center items-center">
-  <form class="bg-white my-5  grid grid-cols-3 grid-rows-1 justify-items-center items-center p-5" method="post">
+  <form class="bg-cyan-950 my-5  grid grid-cols-3 grid-rows-1 justify-items-center items-center p-5" method="post">
     {% csrf_token %}
     {{ formsell }}
     <button id="sell" name="sell" type="submit"
-      class="bg-green-700 text-3xl text-gray-200 w-20 rounded-3xl  p-2">+</button>
+      class="bg-gray-300 text-3xl text-cyan-950 w-20 rounded-3xl  p-2">+</button>
   </form>
-  <aside class="h-[fit-contect] w-[fit-content] bg-white p-2 mb-10 rounded-3xl">
+  <aside class="h-[fit-contect] w-[fit-content] bg-cyan-950 p-2 mb-10 rounded-3xl">
     {% include "listsellproducts.html" %}
   </aside>
-  <section class="bg-white grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center">
-    <form method="post"
-      class="bg-white my-20  grid grid-cols-4 grid-rows-1 justify-items-center items-center rounded-2xl">
-      {% csrf_token %}
-      {{ formregsitersell }}
-      <button id="add" name="add" type="submit"
-        class="bg-green-700  text-xl text-gray-200 rounded-2xl  p-2">agregar</button>
+  <section class="bg-cyan-950 grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center border border-gray-300 P-2 rounded-3xl"> 
+    <form method="post" class="bg-cyan-950 my-20  grid grid-cols-4 grid-rows-1 justify-items-center items-center rounded-2xl">
+    {% csrf_token %} {{ formregsitersell }}
+    <button id="add" name="add" type="submit" class="bg-gray-300  text-xl text-cyan-950 rounded-2xl  p-2">agregar</button>
     </form>
-    <div class="bg-gray-200 grid grid-cols-1 my-10 text-xl text-black font-extralight p-2 rounded-3xl">
+    <div class="bg-cyan-950 grid grid-cols-1 my-10 text-xl text-gray-300 font-extralight p-2 rounded-3xl">
       <form method="post">
         {% csrf_token %}
         {{ sentform }}
@@ -49,7 +46,7 @@
             {% if formsearch.query.help_text %}<small>{{ formsearch.query.help_text }}</small>{% endif %}
             {% for error in formsearch.query.errors %}<span style="color: red;">{{ error }}</span>{% endfor %}
           </div>
-          <button type="submit">Buscar</button>
+          <button type="submit" class="bg-gray-300 text-cyan-950 font-extrabold p-2 rounded-2xl my-5" >Buscar</button>
         </form>
 
         <div class="search-results">
@@ -58,8 +55,8 @@
           {% if search_results %}
           {% for client in search_results %}
           <div class="client-item">
-            <p><strong>Correo:</strong> <span class="client-email-copy" data-email="{{ client.email }}"
-                style="cursor: pointer; text-decoration: underline; color: blue;">{{ client.email }}</span></p>
+            <p>Correo <span class="client-email-copy font-extrabold" data-email="{{ client.email }}"
+                style="cursor: pointer; text-decoration: underline; color: white;">{{ client.email }}</span></p>
             {% if client.name %}<p>Nombre: {{ client.name }}</p>{% endif %}
             {% if client.telephone %}<p>Teléfono: {{ client.telephone }}</p>{% endif %}
             {% if client.direction %}<p>Dirección: {{ client.direction }}</p>{% endif %}
