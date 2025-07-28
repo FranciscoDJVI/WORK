@@ -19,20 +19,20 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "Nombre del producto",
-                    "class": "bg-gray-300 italic border border-gray-400 p-2 text-cyan-950",
+                    "placeholder": "Producto",
+                    "class": "bg-gray-400 p-2 text-cyan-950 rounded-2xl",
                 }
             ),
             "price": forms.NumberInput(
                 attrs={
-                    "placeholder": "Precio del producto",
-                    "class": "bg-gray-300 italic border  border-gray-400  p-2 text-cyan-950",
+                    "placeholder": "Precio",
+                    "class": "bg-gray-400 p-2 text-cyan-950 rounded-2xl",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "placeholder": "Descripción...",
-                    "class": "bg-gray-300 italic border border-gray-400  p-2 rounded-2x1 h-50  w-100  text-cyan-950",
+                    "class": "bg-gray-400 p-2 rounded-2x1 text-cyan-950 rounded-2xl",
                 }
             ),
         }
@@ -49,7 +49,7 @@ class DeleteProductForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={
                     "placeholder": "Buscar producto",
-                    "class": "bg-white text-blue-950 italic border border-blue-950 p-2",
+                    "class": "bg-gray-400 text-cyan-950 p-2 rounded-2xl",
                 }
             )
         }
@@ -65,8 +65,8 @@ class SearchProduct(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "placeholder": "buscar producto",
-                    "class": "bg-white text-blue-950 border border-gray-400 p-2 italic",
+                    "placeholder": "buscar",
+                    "class": "bg-gray-400 text-cyan-950 border p-2 rounded-2xl",
                 }
             )
         }
@@ -110,13 +110,13 @@ class StockForm(forms.ModelForm):
             "id_products": forms.Select(
                 attrs={
                     "placeholder": "id_product",
-                    "class": "bg-white text-blue-950 border border-gray-400 p-2 italic m-5 w-30",
+                    "class": "bg-gray-400 text-cyan-950 border border-gray-400 p-2 m-5 rounded-2xl",
                 }
             ),
             "quantitystock": forms.NumberInput(
                 attrs={
                     "placeholder": "cantidad",
-                    "class": "bg-white text-blue-950  border border-gray-400 p-2 italic m-5 text-blue-950",
+                    "class": "bg-gray-400 text-cyan-950  border border-gray-400 p-2 m-5 rounded-2xl",
                 }
             ),
         }

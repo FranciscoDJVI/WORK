@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 <title>{% block title %}update{% endblock %}</title>
 {% block content %}
-<section class="h-screen grid justify-items-center p-2 w-380 mx-20 my-30 rounded-2xl">
-  <nav class="mx-10 my-10 text-blue-950 p-3 absolute top-0 right-30 text-xl">
+<section class="h-screen flex flex-col items-center p-2  my-30 rounded-2xl">
+  <nav class="mx-10 my-10 text-gray-400 p-3 absolute top-0 right-30 text-xl">
     <a href="{% url 'list-product' %}">Productos/</a>
     <a href="{% url 'register_product' %}">Registrar productos/</a>
     <a href="{% url 'delete-product' %}">Eliminar productos/</a>
     <a href="{% url 'stock_products' %}">Stock/</a>
     <a href="{% url 'main' %}">Home</a>
   </nav>
-  <span class="text-blue-950 text-xl p-2 mb-10">Actualizar productos</span>
-  <section class="bg-white grid justify-items-center rounded-2xl">
+  <span class="text-gray-400 text-xl p-2 mb-10">Actualizar productos</span>
+  <section class="bg-cyan-950 flex flex-col items-center rounded-2xl">
     <form method="post"
-      class="bg-white grid grid-cols-2 grid-rows-1 items-center gap-2 mx-20 my-20 rounded-2xl p-2 text-xl w-150">
+      class="bg-cyan-950 flex flex-row items-center gap-2 rounded-2xl p-2 text-xm">
       {% csrf_token %}
       {{ form }}
       <button type="submit" name="search"
-        class="bg-blue-950 text-white rounded-2xl border border-r-blue-950 p-2">search</button>
+        class="bg-gray-400 text-cyan-950 rounded-2xl  p-2">Buscar</button>
     </form>
     <form method="post"
-      class="bg-white grid grid-cols-4 grid-rows-1 justify-items-center items-center mx-10 my-30  p-2 rounded-2xl text-xl">
+      class="bg-cyan-950 flex flex-row space-x-2 items-center my-30  p-4 rounded-2xl text-xm border border-gray-400">
       {% csrf_token %}
       {{ formupdate }}
-      <button type="submit" name="update" class="bg-blue-950 text-white rounded-2xl w-50 p-2">update</button>
+      <button type="submit" name="update" class="bg-gray-400 text-cyan-950 rounded-2xl p-2">Actualizar</button>
     </form>
   </section>
   {% if messages %}

@@ -1,7 +1,7 @@
 {% extends "base.html"%}
 <title>{% block title %}{% endblock%}</title>
 {% block content %}
-<table class="bg-gray-300 mx-5 rounded-2xl text-cyan-950 w-[fit-content] h-[fit-content]">
+<table class="mx-5 rounded-2xl text-cyan-950 w-[fit-content] h-[fit-content]">
     <thead>
         <tr class="grid grid-cols-2 justify-items-center items-center bg-cyan-950 text-xl text-gray-300">
             <th>Nombre</th>
@@ -10,7 +10,7 @@
     </thead>
     <tbody>
         {% for product in list_stock %}
-        <tr class="grid grid-cols-2 justify-items-center p-2 italic text-xl font-extrabold">
+        <tr class="grid grid-cols-2 justify-items-center p-2 text-xl bg-gray-400 text-cyan-950 my-1">
             <td>{{ product.id_products.name }}</td>
             <td>{{ product.quantitystock }}</td>
         </tr>
