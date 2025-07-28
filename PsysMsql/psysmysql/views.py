@@ -432,7 +432,8 @@ class SellProductView(View):
 
                 except Stock.DoesNotExist:
                     messages.error(
-                        request, f"Producto ID {product_id} no encontrado en stock."
+                        request,
+                        f"Producto ID {product_id} no encontrado en stock.",
                     )
                 except DatabaseError as e:
                     messages.error(
