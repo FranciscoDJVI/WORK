@@ -3,8 +3,8 @@
 {% block title%}Register-clients{% endblock%}
 
 {% block content %}
-<section class="bg-cyan-950 grid justify-items-center p-4 mx-100 my-10 text-xm text-gray-400 font-extrabold border border-gray-400 rounded-3xl">
-    <form method="post" class="grid gri grid-rows-9 items-center">
+<section class="my-30 mx-20">
+    <form method="post" class="flex flex-row flex-wrap gap-2 items-center">
         {%csrf_token%}
         {{ formclients }}
         <button class="bg-gray-400 text-cyan-950 rounded-2xl  p-2" type="submit">register</button>

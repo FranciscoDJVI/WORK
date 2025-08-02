@@ -1,10 +1,10 @@
 {% extends "base.html" %} {% block content %}
-<div class="h-screen mx-10 my-10">
-  <h2 class="text-2xl">Registrarse</h2>
-  <nav class="mx-10 my-5 bg-white p-4 rounded-2xl">
-    <form method="post" class="grid gap-4 italic text-xl text-blue-950">
+<div class="my-10">
+  <h2 class="text-xl mx-10 text-gray-400">Registrarse</h2>
+  <nav class="mx-10 my-5 bg-cyan-950 p-4 rounded-2xl">
+    <form method="post" class="flex flex-col gap-2 italic text-xl text-gray-400">
       {% csrf_token %} {{ form.as_p }}
-      <button type="submit" class="bg-blue-950 text-gray-200 rounded-2xl p-4">Registrarse</button>
+      <button type="submit" class="bg-gray-400 text-cyan-950 rounded-2xl p-4 w-50">Registrarse</button>
     </form>
   </nav>
 </div>

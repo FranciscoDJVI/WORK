@@ -1,7 +1,6 @@
 {% extends "base.html"%}
 <title>{% block title %}Stock{% endblock %}</title>
 {% block content %}
-<section class="my-40 h-screen flex flex-col items-center">
   <nav class="mx-10 my-10 text-gray-300 p-3 absolute top-0 right-30 text-xl">
     <a href="{% url 'list-product' %}">Productos/</a>
     <a href="{% url 'sell_product' %}">Vender productos/</a>
@@ -10,9 +9,10 @@
     <a href="{% url 'update-product' %}">Actualizar productos/</a>
     <a href="{% url 'main' %}">Home</a>
   </nav>
-  <section class="bg-cyan-950 h-20 rounded-2xl">
+<section class="my-40 flex items-center flex-col gap-10">
+  <section class="flex flex-row items-center justify-center gap-10">
     <form method="post"
-      class="flex flex-row justify-items-center items-center text-cyan-950 text-xl">
+      class=" text-cyan-950 text-xl flex flex-row items-center">
       {% csrf_token %}
       {{ form }}
       <button type="submit" class="bg-gray-400 rounded-2xl text-cyan-950 text-xl p-2 w-30">Registrar</button>
@@ -27,7 +27,7 @@
     </div>
     {% endif %}
   </section>
-  <aside class="my-20">
+  <aside class="h-[fit-content] w-[fit-content] bg-cyan-950 p-2 mb-10  max-h-64 overflow-y-auto">
     {% include "liststock.html" %}
   </aside>
 </section>

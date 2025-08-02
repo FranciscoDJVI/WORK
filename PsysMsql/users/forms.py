@@ -17,18 +17,22 @@ class SignUpForm(UserCreationForm):
         widgets = {
             "username": forms.TextInput(
                 attrs={
-                    "class": "border border-blue-950 p-2",
+                    "class": "bg-gray-400 rounded-2xl",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "class": "border border-blue-950 p-2",
+                    "class": "bg-gray-400 rounded-2xl",
                 }
             ),
             "password_1": forms.PasswordInput(
-                attrs={"class": "border border-blue-950"}
+                attrs={
+                    "class": "bg-gray-400 rounded-2xl",
+                }
             ),
             "Password_2": forms.PasswordInput(
-                attrs={"class": "border border-blue-950"}
+                attrs={
+                    "class": "bg-gray-400 rounded-2xl",
+                }
             ),
         }

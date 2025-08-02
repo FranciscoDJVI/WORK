@@ -1,17 +1,17 @@
 {% extends "base.html" %} 
 {% block title%}Login{% endblock %}
 {% block content %}
-<section class="flex h-screen">
-  <section class="h-screen bg-gray-300 absolute right-0 grid grid-cols-1 grid-rows-1">
-    <form method="post" class="grid justify-center items-center mx-5 my-60 h-[fit-content]">
+<div class="flex flex-col items-end gap-2 flex-wrap">
+ <section class="flex flex-col gap-2 bg-gray-400 p-2 h-screen overflow-auto w-100">
+    <form method="post" class="flex flex-col my-30 mx-5 flex-wrap">
       {% csrf_token %} {{ form.as_p }}
-      <button type="submit" class="bg-cyan-950 text-gray-400 p-2 rounded-2xl m-5">Iniciar Sesión</button>
+      <button type="submit" class="bg-cyan-950 w-[fit-content] my-5 text-gray-400 p-2 ">Iniciar Sesión</button>
     </form>
-    <p class="mx-10 m-40 w-90 justify text-justify border border-black p-4">
+    <p class="mx-5">
       Al acceder al PSYS aceptas los terminos de tratamiento de datos establecidos.
     </p>
-    <a href="{% url  "app" %}" class="absolute top-90 left-50 my-5">volver</a>
-  </section>
+    <a href="{% url  "app" %}" class=" mx-5 bg-cyan-950 text-gray-400 p-2 rounded-2xl w-[fit-content]">volver</a>
 </section>
+</div>
 {% include "footer.html" %}
 {% endblock %}

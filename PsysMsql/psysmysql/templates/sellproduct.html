@@ -1,26 +1,27 @@
 {% extends "base.html" %}
-<!doctype html>
 <title>{% block title %}sell-product{% endblock %}</title>
 {% block content %}
-<nav class="mx-10 my-10 text-gray-300 p-3 absolute top-0 right-30 text-xl">
-  <a href="{% url 'list-product' %}">Productos/</a>
-  <a href="{% url 'register_product' %}">Registrar productos/</a>
-  <a href="{% url 'delete-product' %}">Eliminar productos/</a>
-  <a href="{% url 'update-product' %}">Actualizar productos/</a>
-  <a href="{% url 'stock_products' %}">stock/</a>
-  <a href="{% url 'main' %}">home<a />
-</nav>
-<section class="mx-20 my-40 grid justify-items-center items-center">
-  <form class="bg-cyan-950 my-3 flex flex-row justify-items-center items-center p-2" method="post">
+<section class="grow flex flex-col items-center flex-wrap my-10 gap-2">
+  <nav class="mx-10 my-5 text-gray-300 p-3 absolute top-0 right-30 text-xl">
+    <a href="{% url 'list-product' %}">Productos/</a>
+    <a href="{% url 'register_product' %}">Registrar productos/</a>
+    <a href="{% url 'delete-product' %}">Eliminar productos/</a>
+    <a href="{% url 'update-product' %}">Actualizar productos/</a>
+    <a href="{% url 'stock_products' %}">stock/</a>
+    <a href="{% url 'main' %}">home<a />
+  </nav>
+  <section class="flex flex-col items-center">
+    <form class="flex flex-row items-center my-5" method="post">
     {% csrf_token %}
     {{ formsell }}
     <button id="sell" name="sell" type="submit"
       class="bg-gray-400 text-xl text-cyan-950 w-15 rounded-3xl  p-2"><i class="fa-solid fa-plus"></i></button>
   </form>
-  <aside class="h-[fit-contect] w-[fit-content] bg-cyan-950 p-2 mb-10 rounded-3xl">
+  <aside class="h-[fit-content] w-[fit-content] bg-cyan-950 p-2 mb-10  max-h-64 overflow-y-auto">
     {% include "listsellproducts.html" %}
   </aside>
-  <section class="bg-cyan-950 grid  grid-cols-2 grid-rows-1 gap-2 justify-items-center items-center border border-gray-400 P-2 rounded-3xl"> 
+  </section>
+    <section class="bg-cyan-950 flex gap-4 p-1 border border-gray-400">
     <form method="post" class="bg-cyan-950 my-20 flex flex-row space-x-1 justify-items-center items-center rounded-2xl">
     {% csrf_token %} {{ formregsitersell }}
     <button id="add" name="add" type="submit" class="bg-gray-400  text-xm text-cyan-950 rounded-2xl  p-2">agregar</button>
@@ -35,7 +36,7 @@
             placeholder="ejemplo@dominio.com" readonly class="italic font-extrabold">
         </div>
         <button id="sent" name="sent" type="submit"
-          class="bg-green-700  text-xl text-white rounded-2xl mb-10  p-2 absolute right-10 ">enviar</button>
+          class="bg-green-700  text-xl text-white rounded-2xl mb-10  p-2 absolute right-50 bottom-1/4 ">enviar</button>
       </form>
       <div class="section">
         <h2>Búsqueda de Clientes(Correo)</h2>
@@ -132,5 +133,5 @@
     });
   });
 </script>
-{% include "footer.html" %}
+{% include "footer.html" %}de
 {% endblock %}

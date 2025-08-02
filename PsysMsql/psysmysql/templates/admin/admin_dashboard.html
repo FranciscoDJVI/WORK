@@ -1,45 +1,41 @@
 {% extends "base.html" %}
 <title>{% block title%}main-admin{% endblock %}</title>
  {% block content %}
-<section class="flex">
+<section class="flex flex-col h-screen overflow-auto">
+  <nav class="flex flex-row items-center">
   <p class="flex-6 mx-10 my-10 text-2xl text-gray-300">Bienvenidos a PSYS. Esta es una aplicación para el manejo de inventario y venta de productos.</p>
-  <ul class="flex-1 grid justify-items-center my-10 text-xm text-gray-300 p-2 rounded-2xl">
+    <ul class="flex-1 grid justify-items-center my-10 text-xm text-gray-300 p-2 rounded-2xl">
      {% if user.is_authenticated %}
       {% for group in user.groups.all %}
         <li> {{ group }}</li>
         {% endfor %}
       <li>Hola, {{ user.username }}!</li>
     {% endif %}  </ul>
-  <form class="flex-1 grid justify-items-center mx-10 my-10 text-xm text-gray-300 k p-2 rounded-2xl" method="post" action="{% url "login" %}">
+    <form class="flex-1 grid justify-items-center mx-10 my-10 text-xm text-gray-300 k p-2 rounded-2xl" method="post" action="{% url "login" %}">
       {%  csrf_token %}
       <button type="submit">Cerrar sesion</button>
-  </form>
+    </form>
+  </nav>
+  <section class="flex gap-2 flex-wrap justify-center">
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 p-3 rounded-2xl text-cyan-950">
+      <span class="font-extrabold p-4 rounded-2xl">Ventas <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}><i class="fa-solid fa-cart-plus"></i></a></span>
+    </section>
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 p-3 rounded-2xl text-cyan-950">
+      <span class="font-extrabold  p-4 rounded-2xl">Stock<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'stock_products' %}><i class="fa-solid fa-boxes-stacked"></i></a></span>
+    </section>
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10  p-3 rounded-2xl text-cyan-950">
+      <span class="font-extrabold p-4 rounded-2xl">Registrar producto<a class="rounded-4xl  p-2 text-lg font-extrabold" href={% url 'register_product' %}><i class="fa-solid fa-plus"></i></a></span>
+    </section>
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 p-3 rounded-2xl text-cyan-950">
+      <span class="font-extrabold  p-4 rounded-2xl">Registrar usuario<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'assing_user' %}><i class="fa-solid fa-user-plus"></i></a></span>
+    </section>
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 p-3 rounded-2xl text-cyan-950">
+      <span class="font-extrabold   p-4 rounded-2xl ">Registro de ventas<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'list_all_sell_register'%}><i class="fa-solid fa-eye"></i></a></span>
+    </section>
+    <section class="w-[fit-content] bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 p-3 rounded-2xl text-cyan-950">
+      <span class="p-4 rounded-2xl font-extrabold">Registrar clientes<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'register_client'%}><i class="fa-solid fa-address-book"></i></a></span>
+    </section>
+  </section>
  </section>
-<div class="flex">
-  <section class="flex-1 h-screen w-100  mx-10 mb-10 grid grid-cols-1 grid-rows-1 justify-items-start items-center p-4 text-gray-400 text-xl rounded-2xl">
-    <section class="w-80 bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-20 left-10 inline-block p-3 rounded-2xl text-cyan-950">
-      <span class="font-extrabold mx-10 p-4 rounded-2xl">Ventas <a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'sell_product' %}><i class="fa-solid fa-cart-plus"></i></a></span>
-    </section>
-    <section class="w-80  bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-40 left-10 inline-block p-3 rounded-2xl text-cyan-950">
-      <span class="font-extrabold mx-10  p-4 rounded-2xl">Stock<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'stock_products' %}><i class="fa-solid fa-boxes-stacked"></i></a></span>
-    </section>
-    <section class="w-80  bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-60 left-10 inline-block p-3 rounded-2xl text-cyan-950">
-      <span class="font-extrabold mx-10 p-4 rounded-2xl">Registrar producto<a class="rounded-4xl  p-2 text-lg font-extrabold" href={% url 'register_product' %}><i class="fa-solid fa-plus"></i></a></span>
-    </section>
-    <section class="w-80  bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-80 left-10 inline-block p-3 rounded-2xl text-cyan-950">
-      <span class="font-extrabold mx-10  p-4 rounded-2xl">Registrar usuario<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'assing_user' %}><i class="fa-solid fa-user-plus"></i></a></span>
-    </section>
-  </section>
-  <section class="w-80  bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-100 left-10 inline-block p-3 rounded-2xl text-cyan-950 text-xl">
-      <span class="font-extrabold mx-10  p-4 rounded-2xl ">Registro de ventas<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'list_all_sell_register'%}><i class="fa-solid fa-eye"></i></a></span>
-  </section>
-  <section class="w-80  bg-gray-300 hover:bg-cyan-800 hover:text-gray-300 mt-10 absolute top-120 left-10 inline-block p-3 rounded-2xl text-cyan-950 text-xl">
-      <span class="mx-10  p-4 rounded-2xl font-extrabold">Registrar clientes<a class="rounded-4xl p-2 text-lg font-extrabold" href={% url 'register_client'%}><i class="fa-solid fa-address-book"></i></a></span>
-  </section>
-  </section>
-  <aside class="flex-3 mr-10 mb-10 border border-blue-950 p-2 rounded-2xl">
-    <h1>coming soon...</h1>
-  </aside>
-</div>
-{% include 'footer.html'%}
+{% include "footer.html" %}
 {% endblock %}
